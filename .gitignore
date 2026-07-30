@@ -1,0 +1,13 @@
+*.log
+*.tmp
+*.etl
+*.evtx
+*.dmp
+*.zip
+diagnose-*.json
+energie-bericht*.html
+battery-report*.html
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

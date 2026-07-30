@@ -1,0 +1,5 @@
+Windows-PC-Guru
+Copyright 2026 Norman Wagner / WagnerConnect
+
+This product includes a portable Agent Skill authored by Norman Wagner /
+WagnerConnect. It is distributed under the Apache License, Version 2.0.

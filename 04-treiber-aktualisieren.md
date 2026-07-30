@@ -29,17 +29,21 @@ die Seite des **Mainboard-Herstellers** (Modell steht in `msinfo32` unter
 _Einstellungen → Windows Update → Erweiterte Optionen → Optionale Updates →
 Treiberupdates._ **Adminrechte:** Windows fragt bei Bedarf.
 
-Hier liegen von Microsoft geprüfte Treiber – die sicherste Quelle. Angebotene
-Treiberupdates einzeln installieren, neu starten. Für viele PCs ist danach schon
-alles Wesentliche aktuell.
+Hier liegen über Windows Update angebotene Treiber. Nicht jedes optionale Paket
+muss installiert werden: Modell, Anbieter, Version, Release Notes und konkreten
+Anlass prüfen. Bei Notebooks und Komplett-PCs kann ein OEM-Paket wegen
+gerätespezifischer Anpassungen geeigneter sein. Bestätigte Updates einzeln
+installieren und danach neu starten und testen.
 
 ## Schritt 2: PC- bzw. Mainboard-Hersteller
 
 Die Support-Seite des Herstellers mit der exakten Modell- oder Seriennummer
 aufrufen (z. B. Dell SupportAssist-Seite, HP Support, Lenovo Support, bzw.
 ASUS/MSI/Gigabyte/ASRock für Mainboards). Dort werden Treiber passend zum Gerät
-gelistet. Nur Treiber laden, die **neuer** sind als die installierte Version –
-und nur die Kategorien, die es im Gerät wirklich gibt.
+gelistet. Eine höhere Versionsnummer allein ist kein Installationsgrund. Nur
+Pakete laden, die zum exakten Modell, Windows-Build und zur vorhandenen
+Hardware passen und ein konkretes Problem oder eine Sicherheitskorrektur
+adressieren.
 
 ⚠️ **BIOS-/UEFI-Updates** werden auf diesen Seiten ebenfalls angeboten:
 **nicht automatisch mitmachen.** Nur bei konkretem Grund (Sicherheitslücke,
@@ -67,9 +71,11 @@ Quelle je nach GPU (Modell aus `dxdiag`):
 - **Intel (integriert/Arc):** intel.de → Download-Center, oder – bei Notebooks –
   bevorzugt die Version des Notebook-Herstellers.
 
-Bei der Installation die Option **„Saubere Installation"/„Benutzerdefiniert"**
-wählen, keine Zusatz-Software abwählen, die nicht gebraucht wird. Neustart, dann
-testen (Video abspielen, ggf. Spiel starten).
+Den normalen Herstellerpfad verwenden. Eine **„saubere Installation“** nur
+wählen, wenn sie für das konkrete Problem begründet ist und klar ist, welche
+Einstellungen oder Komponenten dadurch entfernt werden. Nicht benötigte
+Zusatzsoftware abwählen. Neustart, dann testen (Video abspielen, ggf. die
+betroffene Anwendung starten).
 
 ## Schritt 5: Netzwerk, WLAN und Bluetooth
 
@@ -93,6 +99,7 @@ und Soundtest.
 
 1. `devmgmt.msc` öffnen: keine gelben Warndreiecke mehr? Reste in die Problemliste.
 2. Zuverlässigkeitsverlauf (`perfmon /rel`) einige Tage beobachten – bleibt es stabil?
-3. Neuen Wiederherstellungspunkt anlegen: `Nach Treiberupdates 2026-07`.
+3. Falls System Restore verwendet wird, den neuen Punkt eindeutig mit aktuellem
+   Datum und Zweck benennen.
 
 Weiter mit [Phase 5: Aufräumen und Optimieren](05-aufraeumen-optimieren.md).

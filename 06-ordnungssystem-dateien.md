@@ -90,7 +90,11 @@ _Ablauf:_ Erst werden nur Dateien gleicher Größe vorausgewählt (schnell), dan
 per Prüfsumme bestätigt. Gleiche „Gruppe" in der CSV = identischer Inhalt.
 Bei großen Fotosammlungen kann das eine Weile dauern.
 
-**Auswertung gemeinsam:** Die Datei `duplikate-bericht.csv` in Excel öffnen.
+Der Bericht enthält vollständige private Dateipfade und ist deshalb sensibel.
+Vorher den zu prüfenden Ordner eng begrenzen, einen geeigneten lokalen
+Speicherort wählen und keine fremden Benutzerprofile einbeziehen.
+
+**Auswertung gemeinsam:** Die Datei `duplikate-bericht.csv` lokal öffnen.
 Pro Gruppe wird entschieden, **welcher Pfad das Original bleibt** (in der Regel
 der Ort im neuen Ordnungssystem). Erst nach dieser Durchsicht und ausdrücklicher
 Freigabe werden Kopien gelöscht – Papierkorb an, Backup aktuell.
@@ -119,16 +123,21 @@ neue System zwei bis vier Wochen im Alltag funktioniert hat.
 ## 6.5 Fotos und Videos nach Datum sortieren
 
 **Schritt 1 – Analyse (nichts wird verändert):** Dieses Skript zeigt nur, wie
-viele Fotos pro Jahr/Monat vorhanden sind (nach Aufnahme-/Änderungsdatum):
+viele Dateien pro Jahr/Monat vorhanden sind – nach dem
+**Dateisystem-Änderungsdatum**:
 
 ```powershell
 Get-ChildItem "$env:USERPROFILE\Pictures" -Recurse -File -Include *.jpg,*.jpeg,*.png,*.heic,*.mp4,*.mov -ErrorAction SilentlyContinue | Group-Object { $_.LastWriteTime.ToString('yyyy-MM') } | Sort-Object Name | Format-Table Name, Count
 ```
 
+`LastWriteTime` ist **nicht** zuverlässig das Aufnahmedatum und kann beim
+Kopieren oder Bearbeiten verändert worden sein. Für eine Sortierung nach
+Aufnahmezeit müssen EXIF-/Medienmetadaten mit einem geeigneten lokalen Werkzeug
+geprüft werden. Unklare Dateien zunächst nur berichten, nicht verschieben.
+
 **Schritt 2 – Nach Freigabe:** Pro Monat einen Ordner `Fotos\JJJJ\JJJJ-MM` anlegen
-und die Dateien **kopieren** (wieder `robocopy`, wie 6.4). Ereignisnamen
-(„2024-06 Urlaub Ostsee") werden anschließend manuell ergänzt – das Datum liefert
-die Technik, den Namen liefert die Erinnerung.
+und die bestätigten Dateien **kopieren** (wieder `robocopy`, wie 6.4).
+Ereignisnamen („2024-06 Urlaub Ostsee") werden anschließend manuell ergänzt.
 
 ⚠️ WhatsApp-Bilder, Screenshots und Kamera-Importe vorher grob trennen –
 sonst landen 2 000 Chat-Bilder zwischen den Urlaubsfotos.

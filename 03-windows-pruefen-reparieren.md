@@ -25,9 +25,10 @@ Abschluss der Reparaturphase installieren, nicht mittendrin.
 **Keine Adminrechte zum Ansehen.**
 
 1. _Einstellungen → Datenschutz und Sicherheit → Windows-Sicherheit_ öffnen.
-2. Alle Kacheln müssen grün sein: **Viren- & Bedrohungsschutz** (Defender aktiv,
-   Definitionen aktuell), **Firewall- & Netzwerkschutz** (alle drei Profile aktiv),
-   **App- & Browsersteuerung**, **Gerätesicherheit**.
+2. Schutzstatus, Schutzanbieter und Hinweise prüfen: **Viren- &
+   Bedrohungsschutz**, **Firewall- & Netzwerkschutz**, **App- &
+   Browsersteuerung** und **Gerätesicherheit**. Bei einem bewusst installierten
+   Drittanbieter-Virenschutz kann Defender ordnungsgemäß im passiven Modus sein.
 3. Einen **vollständigen Scan** starten: _Viren- & Bedrohungsschutz → Scanoptionen
    → Vollständige Überprüfung_. Das kann 1–2 Stunden dauern und darf im
    Hintergrund laufen.
@@ -47,9 +48,10 @@ Problemliste, Entscheidung gemeinsam treffen.
 DISM /Online /Cleanup-Image /RestoreHealth
 ```
 
-Prüft das Windows-Systemabbild gegen Microsoft-Quellen und repariert beschädigte
-Komponenten. Dauert 10–30 Minuten, der Fortschritt kann zwischendurch scheinbar
-hängen (z. B. bei 62 %) – das ist normal, nicht abbrechen.
+Prüft und repariert den Windows-Komponentenspeicher. Standardmäßig kann DISM
+Windows Update als Reparaturquelle verwenden; in verwalteten oder
+Offline-Umgebungen kann eine passende alternative Quelle nötig sein. Nicht
+abbrechen, bis DISM ein Ergebnis ausgibt.
 
 **Schritt 2 – Systemdateien prüfen und ersetzen:**
 
@@ -78,15 +80,17 @@ chkdsk C:
 
 Prüft das Dateisystem von C: im Lesemodus und meldet, ob Fehler vorliegen.
 
-**Schritt 2 – Nur falls Schritt 1 Fehler meldet, Reparatur planen:**
+**Schritt 2 – Nur falls Schritt 1 weitere Prüfung empfiehlt:**
 
 ```
 chkdsk C: /scan
 ```
 
-Repariert, was ohne Sperrung des Laufwerks möglich ist, und plant den Rest.
-Falls chkdsk eine Prüfung beim Neustart vorschlägt, mit `J` bestätigen und neu
-starten.
+Führt eine Onlineprüfung aus. `/scan` ist **kein pauschaler Reparaturbefehl**.
+Falls CHKDSK eine Reparatur oder Offlineprüfung empfiehlt, zuerst Backup und
+Datenträgerzustand prüfen und den vorgeschlagenen Reparaturschritt gesondert
+freigeben. Eine Reparatur kann einen Neustart und die Sperrung des Laufwerks
+erfordern.
 
 ⚠️ Meldet `chkdsk` wiederholt Fehler oder war in Phase 1.3 ein Datenträger nicht
 „Healthy": zusätzlich beim SSD-/Festplattenhersteller den Gesundheitsstatus
@@ -153,12 +157,14 @@ oder „Beste Leistung").
 
 **Zusätzlich – Akku-/Energiebericht als Datei (Adminrechte erforderlich):**
 
-```
-powercfg /energy /output "%USERPROFILE%\Desktop\energie-bericht.html"
+```powershell
+powercfg /energy /output "$env:USERPROFILE\Desktop\energie-bericht.html"
 ```
 
-Beobachtet das System 60 Sekunden und schreibt einen HTML-Bericht mit
-Energie-/Treiberproblemen auf den Desktop – gut als Grundlage für Phase 4/5.
+Nur im Leerlauf und ohne offene Dokumente ausführen. Der Befehl beobachtet das
+System 60 Sekunden und schreibt einen lokalen HTML-Bericht. Der Bericht kann
+Geräte- und Nutzungsdetails enthalten und darf nicht ungeprüft weitergegeben
+werden.
 
 ---
 

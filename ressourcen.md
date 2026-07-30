@@ -6,8 +6,10 @@ Sicherheitsregeln dieses Projekts: offizielle Quellen (Microsoft) oder etabliert
 Open-Source-Projekte mit einsehbarem Quellcode. Keine „Tuning-Suiten",
 Registry-Cleaner oder Treiber-Booster.
 
-**Installationsregel:** Immer über `winget` (Microsoft-Paketquelle) oder die
-offizielle GitHub-Releases-Seite installieren – nie über Download-Portale.
+**Installationsregel:** Quelle, exakte Paket-ID, Herausgeber und Signatur
+prüfen. WinGet kann mehrere Quellen verwenden und ist kein Beweis, dass jedes
+Paket von Microsoft stammt. Nur über WinGet mit bewusst gewählter Quelle oder
+die offizielle Projekt-/Herstellerseite installieren – nie über Download-Portale.
 
 ---
 
@@ -16,7 +18,8 @@ offizielle GitHub-Releases-Seite installieren – nie über Download-Portale.
 ### Microsoft PowerToys · Open Source
 
 - Repo: <https://github.com/microsoft/PowerToys> · Doku: <https://learn.microsoft.com/de-de/windows/powertoys/>
-- Installation: `winget install Microsoft.PowerToys`
+- Installation erst nach `winget show --id Microsoft.PowerToys --exact` und
+  Freigabe: `winget install --id Microsoft.PowerToys --exact --source winget`
 - Nützlich für dieses Projekt:
   - **PowerRename** – Massen-Umbenennung mit Suchen/Ersetzen, Regex und Undo –
     ideal für die Foto-Umbenennung nach dem Schema `JJJJ-MM Ereignis` (Phase 6.5).
@@ -37,9 +40,10 @@ offizielle GitHub-Releases-Seite installieren – nie über Download-Portale.
 ### winget (App-Installer, in Windows 11 enthalten)
 
 - Doku: <https://learn.microsoft.com/de-de/windows/package-manager/winget/>
-- Wird im Handbuch bereits genutzt (Programmliste, Deinstallation). Zusätzlich:
-  `winget upgrade --all` aktualisiert alle über winget verwalteten Programme
-  aus offiziellen Paketquellen.
+- Wird im Handbuch bereits für Bestandsaufnahme und gezielte Deinstallation
+  genutzt. `winget upgrade` zeigt zunächst Kandidaten. Jedes Paket anschließend
+  mit exakter ID und Quelle prüfen und einzeln freigeben; kein unbeaufsichtigtes
+  `winget upgrade --all`.
 
 ---
 
@@ -65,16 +69,12 @@ offizielle GitHub-Releases-Seite installieren – nie über Download-Portale.
   als _Einstellungen → Speicher_ (Phase 5.2). Nur analysieren, nichts direkt
   aus dem Tool heraus löschen.
 
-### Fotoverwaltung – digiKam (lokal) / Immich (selbst gehostet)
+### Fotoverwaltung – digiKam (lokal)
 
 - **digiKam**: <https://github.com/KDE/digikam> · <https://www.digikam.org/> –
   vollwertige lokale Fotoverwaltung: Verschlagwortung, Metadaten,
   **eingebaute Duplikat-/Ähnlichkeitssuche**, RAW-Unterstützung. Gute Ergänzung
   zu Phase 6.5, wenn die Sammlung fünfstellig wird.
-- **Immich**: <https://github.com/immich-app/immich> – selbst gehostete
-  Google-Photos-Alternative (Backup vom Handy, Gesichtserkennung, Suche).
-  Nur relevant, wenn ein Heimserver/NAS vorhanden ist; Einrichtung ist
-  deutlich aufwendiger als digiKam.
 
 ---
 
@@ -95,7 +95,9 @@ Entsprechend der Sicherheitsregeln des Handbuchs verzichten wir auf:
 
 - [Microsoft PowerToys – Microsoft Learn](https://learn.microsoft.com/en-us/windows/powertoys/)
 - [PowerRename – Microsoft Learn](https://learn.microsoft.com/en-us/windows/powertoys/powerrename)
-- [digiKam vs. Immich – XDA Developers](https://www.xda-developers.com/digikam-compares-immich-open-source-photo-management/)
-- [Open-Source-Fotoverwaltung im Überblick – XDA Developers](https://www.xda-developers.com/open-source-photo-management-tools-organize-library/)
-- [Duplikat-Finder-Vergleich – SoftPicker](https://softpicker.com/best-free-duplicate-file-finders/)
-- [Duplicate File Finders – SourceForge-Verzeichnis](https://sourceforge.net/directory/duplicate-file-finders/)
+- [WinGet – Microsoft Learn](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
+- [Sysinternals – Microsoft Learn](https://learn.microsoft.com/en-us/sysinternals/)
+- [digiKam – offizielles Projekt](https://www.digikam.org/)
+- [Czkawka – offizielles Repository](https://github.com/qarmin/czkawka)
+- [dupeGuru – offizielles Repository](https://github.com/arsenetar/dupeguru)
+- [WinDirStat – offizielles Repository](https://github.com/windirstat/windirstat)

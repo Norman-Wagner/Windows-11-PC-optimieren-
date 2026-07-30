@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "windows-pc-guru",
+  "displayName": "Windows-PC-Guru",
+  "version": "0.1.0",
+  "description": "Sichere Windows-11-Diagnose, Reparatur und Automatisierung mit Zustimmungsgates und Rückweg.",
+  "author": {
+    "name": "Norman Wagner / WagnerConnect",
+    "url": "https://github.com/Norman-Wagner"
+  },
+  "homepage": "https://github.com/Norman-Wagner/Windows-11-PC-optimieren-",
+  "repository": "https://github.com/Norman-Wagner/Windows-11-PC-optimieren-",
+  "license": "Apache-2.0",
+  "keywords": [
+    "windows-11",
+    "diagnostics",
+    "repair",
+    "powershell",
+    "troubleshooting"
+  ]
+}

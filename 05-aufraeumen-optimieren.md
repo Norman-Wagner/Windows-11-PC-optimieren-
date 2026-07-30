@@ -23,25 +23,33 @@ Systembausteine, die andere Programme brauchen.
 
 **Schritt 2 – Nach Freigabe einzeln deinstallieren** (**Adminrechte:** Windows
 fragt): _Einstellungen → Apps → Installierte Apps → ⋯ → Deinstallieren._
-Alternativ pro Programm per winget (exakten Namen aus der Liste verwenden):
+Alternativ zuerst exakte Paket-ID und Quelle mit `winget list` und
+`winget show --id <PAKET-ID> --exact` prüfen. Erst danach nach Freigabe:
 
 ```powershell
-winget uninstall --name "Programmname"
+winget uninstall --id "<PAKET-ID>" --exact
 ```
 
 Nach jeder Deinstallation kurz prüfen, ob alles Übrige noch läuft.
 
 ## 5.2 Speicherplatz freigeben (Bordmittel)
 
-**Schritt 1 – Datenträgerbereinigung (Adminrechte für Systemdateien):**
+**Schritt 1 – Bereinigungsempfehlungen prüfen:** _Einstellungen → System →
+Speicher → Bereinigungsempfehlungen_. Jede Kategorie einzeln öffnen und
+auswählen.
+
+Die klassische Datenträgerbereinigung kann ergänzend verwendet werden
+(Adminrechte für Systemdateien):
 
 ```
 cleanmgr /d C:
 ```
 
-Im Dialog **„Systemdateien bereinigen"** anklicken. Gefahrlos wählbar:
-Temporäre Dateien, Miniaturansichten, Übermittlungsoptimierungsdateien,
-**Windows-Update-Bereinigung** (oft mehrere GB).
+Im Dialog **„Systemdateien bereinigen"** anklicken. Häufig geeignete
+Kandidaten sind temporäre Dateien, Miniaturansichten,
+Übermittlungsoptimierungsdateien und Windows-Update-Bereinigung. Auch diese
+Kategorien vor dem Bestätigen prüfen; keine Kategorie ist pauschal für jedes
+System „gefahrlos“.
 
 ⚠️ „Papierkorb" nur ankreuzen, wenn sicher nichts mehr gebraucht wird.
 ⚠️ „Vorherige Windows-Installation(en)" erst nach Rücksprache – danach ist die

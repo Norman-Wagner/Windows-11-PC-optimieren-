@@ -11,8 +11,9 @@ Phase abgeschlossen ist. Alles hier nutzt Windows-Bordmittel.
 - **2** verschiedene Medien (z. B. externe Festplatte + Cloud)
 - **1** Kopie außer Haus bzw. getrennt vom PC (Cloud oder ausgelagerte Platte)
 
-Für den Hausgebrauch reicht als Minimum: **eine externe Festplatte** (Dateiversionsverlauf
-oder manuelle Kopie) **plus OneDrive** für die wichtigsten Ordner.
+Für den Hausgebrauch ist als praktikabler Anfang eine externe Sicherung plus
+eine getrennte Kopie sinnvoll. Ob OneDrive geeignet ist, hängt vom Konto,
+Speicherplatz und bei dienstlichen Daten von den Vorgaben des Unternehmens ab.
 
 ## 2.2 Sofort-Sicherung der wichtigsten Daten (vor allen Eingriffen)
 
@@ -54,23 +55,26 @@ aktivieren", Speichernutzung ca. 5–10 %.
 **Schritt 2 – Punkt erstellen:** Im selben Fenster **Erstellen…** → Name z. B.
 `Vor Wartung 2026-07` → Erstellen.
 
-Ein Wiederherstellungspunkt sichert **Systemdateien, Treiber und Registry** (nicht
-die persönlichen Dateien) und erlaubt es, fehlgeschlagene Treiber- oder
-Programmänderungen rückgängig zu machen.
+Der klassische Systemwiederherstellungspunkt erfasst Systemdateien,
+Treiberkonfiguration und Einstellungen, aber ersetzt **kein Datenbackup**.
+Windows 11 kann daneben je nach Version das umfassendere „Point-in-time
+Restore“ anbieten; dieses kann auch lokale Dateien, Kennwörter, Zertifikate und
+Schlüssel auf einen früheren Stand zurücksetzen. Vor Verwendung immer die
+tatsächlich angezeigte Funktion und ihre Folgen prüfen.
 
 ## 2.4 Wiederherstellungslaufwerk (Notfall-USB-Stick)
 
-**Adminrechte erforderlich.** USB-Stick mit mindestens 16 GB (⚠️ wird dabei
-**komplett gelöscht** – vorher prüfen, dass nichts Wichtiges darauf liegt):
+**Adminrechte erforderlich.** Windows zeigt die benötigte USB-Größe an
+(⚠️ der gewählte Stick wird dabei **komplett gelöscht** – Laufwerk und Inhalt
+vor dem Bestätigen nochmals prüfen):
 
 ```
 recoverydrive
 ```
 
-_Windows-Taste + R → `recoverydrive`._ Haken bei „Sichert die Systemdateien auf
-dem Wiederherstellungslaufwerk" setzen. Mit diesem Stick lässt sich der PC auch
-dann starten und reparieren, wenn Windows gar nicht mehr hochfährt. Stick
-beschriften und getrennt aufbewahren.
+_Windows-Taste + R → `recoverydrive`._ Die angebotenen Optionen lesen und den
+Assistenten befolgen. Das Wiederherstellungslaufwerk enthält keine Sicherung der
+persönlichen Dateien. Stick beschriften und getrennt aufbewahren.
 
 ## 2.5 Dateiversionsverlauf einrichten (laufende Sicherung)
 

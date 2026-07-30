@@ -1,0 +1,35 @@
+{
+  "name": "windows-pc-guru",
+  "version": "0.1.0",
+  "description": "Sichere Windows-11-Diagnose, Reparatur und Automatisierung mit Zustimmungsgates und Rückweg.",
+  "author": {
+    "name": "Norman Wagner / WagnerConnect"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "windows-11",
+    "pc-diagnose",
+    "pc-reparatur",
+    "powershell",
+    "treiber",
+    "performance",
+    "troubleshooting"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Windows-PC-Guru",
+    "shortDescription": "Windows 11 sicher diagnostizieren und reparieren",
+    "longDescription": "Diagnostiziert Windows-PCs symptomorientiert, entwickelt sichere Automatisierungen und führt Änderungen erst nach konkreter Freigabe mit geprüftem Rückweg aus.",
+    "developerName": "Norman Wagner · WagnerConnect",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Diagnostiziere, warum mein Windows-11-PC langsam ist, und ändere zunächst nichts.",
+      "Prüfe diesen Treiber sicher und plane einen Rückweg.",
+      "Finde die Ursache dieses lokalen Windows-Buildfehlers."
+    ],
+    "brandColor": "#0B3B60"
+  }
+}
