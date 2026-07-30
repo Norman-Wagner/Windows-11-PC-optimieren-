@@ -46,6 +46,7 @@ Windows-Bordmitteln und offiziellen Herstellerquellen.
 | –     | [vorlagen/bestandsaufnahme-checkliste.md](vorlagen/bestandsaufnahme-checkliste.md) | Ausfüllbare Checkliste für Phase 1                                       |
 | –     | [vorlagen/problemliste.md](vorlagen/problemliste.md)                               | Vorlage für die priorisierte Problemliste                                |
 | –     | [ressourcen.md](ressourcen.md)                                                     | Optionale Tools: Microsoft- und Open-Source-Ergänzungen                  |
+| –     | [ki-assistent/SKILL.md](ki-assistent/SKILL.md)                                     | Allgemeiner KI-Skill/Prompt für ChatGPT, Claude und Perplexity           |
 
 ## Arbeitsweise
 
