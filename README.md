@@ -31,6 +31,16 @@ Der kanonische Skill liegt unter [skills/windows-pc-guru](skills/windows-pc-guru
 - [Sicherheits- und Datenschutz-Audit](skills/windows-pc-guru/references/security-baseline-audit.md)
 - Profile: [Büro](skills/windows-pc-guru/profiles/office.md), [Entwicklung](skills/windows-pc-guru/profiles/development.md), [Notebook](skills/windows-pc-guru/profiles/laptop.md), [Spiele](skills/windows-pc-guru/profiles/gaming.md)
 
+## Installation
+
+Für Codex:
+
+```powershell
+npx skills add Norman-Wagner/Windows-11-PC-optimieren- --skill windows-pc-guru
+```
+
+Alternativ den Ordner `skills/windows-pc-guru` in ein Tool mit Agent-Skills-Unterstützung importieren. Die Skripte werden niemals automatisch ausgeführt.
+
 ## Messung
 
 ```powershell
