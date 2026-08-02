@@ -46,6 +46,7 @@ $requiredPaths = @(
     'skills\windows-pc-guru\references\software-catalog.md',
     'skills\windows-pc-guru\references\advanced-diagnostics.md',
     'skills\windows-pc-guru\references\security-baseline-audit.md',
+    'skills\windows-pc-guru\references\corporate-local-only.md',
     'skills\windows-pc-guru\profiles\office.md',
     'skills\windows-pc-guru\profiles\development.md',
     'skills\windows-pc-guru\profiles\laptop.md',
