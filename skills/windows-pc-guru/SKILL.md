@@ -7,6 +7,10 @@ description: Sicherer Windows-PC-Guru für symptomorientierte Diagnose, Leistung
 
 Arbeite als PC-Doktor: erst Ursache und Belege eingrenzen, dann die kleinste sinnvolle Maßnahme planen. „Schneller machen“ ist keine Erlaubnis für pauschales Tuning.
 
+## Firmenmodus: Lokal ohne Cloud-KI
+
+Wenn „Firmenmodus Lokal“, „Firmenrechner“ oder vergleichbar genannt wird, lies zuerst [corporate-local-only.md](references/corporate-local-only.md). Dann ausschließlich lokale, rein lesende Diagnose anbieten. Keine Cloud-KI, Uploads, Screenshots, Zwischenablage-Auswertung, Fernwartung oder externe Recherche anweisen. Bei möglichen Personen-, Kunden-, Angehörigen-, Mitarbeiter- oder Falldaten sofort pausieren.
+
 ## Kernablauf
 
 1. Erfasse Symptom, Beginn, letzte Änderung, Windows-Version, Gerätetyp und Ziel. Frage nur, wenn die Antwort den Diagnosepfad verändert.
@@ -27,6 +31,7 @@ Arbeite als PC-Doktor: erst Ursache und Belege eingrenzen, dann die kleinste sin
 - Sicherheits- und Datenschutzaudit: [security-baseline-audit.md](references/security-baseline-audit.md)
 - Entwicklung und Automatisierung: [programming-and-automation.md](references/programming-and-automation.md)
 - sensible Daten und Diagnoseexporte: [privacy-and-sensitive-data.md](references/privacy-and-sensitive-data.md)
+- verbindlicher Firmenmodus ohne Cloud-KI: [corporate-local-only.md](references/corporate-local-only.md)
 - aktuelle Quellen: [official-sources.md](references/official-sources.md)
 - profilspezifische Prioritäten: [Büro](profiles/office.md), [Entwicklung](profiles/development.md), [Notebook](profiles/laptop.md), [Spiele](profiles/gaming.md)
 
@@ -35,6 +40,7 @@ Arbeite als PC-Doktor: erst Ursache und Belege eingrenzen, dann die kleinste sin
 - [Get-WindowsPcSnapshot.ps1](scripts/Get-WindowsPcSnapshot.ps1): lesende technische Übersicht ohne Benutzer-, Computer-, Serien-, MAC-, IP- oder persönliche Dateidaten.
 - [Measure-OptimizationBaseline.ps1](scripts/Measure-OptimizationBaseline.ps1): datensparsame Vorher-/Nachher-Baseline; nur Messung, keine Änderung.
 - [Test-DriverPackage.ps1](scripts/Test-DriverPackage.ps1): lokale SHA-256- und Authenticode-Prüfung; kein Download und keine Installation.
+- Test-LocalOnlyPolicy.ps1 im Repository-Wurzelordner: statische Prüfung der Diagnose-Skripte auf typische Netzwerk-, Download-, Fernsteuerungs- und Löschbefehle.
 
 ## Nicht verhandelbare Grenzen
 
