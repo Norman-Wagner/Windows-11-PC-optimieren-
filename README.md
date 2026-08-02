@@ -31,6 +31,16 @@ Der kanonische Skill liegt unter [skills/windows-pc-guru](skills/windows-pc-guru
 - [Sicherheits- und Datenschutz-Audit](skills/windows-pc-guru/references/security-baseline-audit.md)
 - Profile: [Büro](skills/windows-pc-guru/profiles/office.md), [Entwicklung](skills/windows-pc-guru/profiles/development.md), [Notebook](skills/windows-pc-guru/profiles/laptop.md), [Spiele](skills/windows-pc-guru/profiles/gaming.md)
 
+## Firmenmodus: lokal ohne Cloud-KI
+
+Für Firmenrechner gibt es den verbindlichen [Firmenmodus Lokal](skills/windows-pc-guru/references/corporate-local-only.md). Er verbietet Cloud-KI, Uploads, Screenshots, Fernwartung und die Auswertung personenbezogener oder vertraulicher Inhalte. Vor der ersten Diagnose:
+
+```powershell
+pwsh -NoProfile -File .\scripts\Test-LocalOnlyPolicy.ps1
+```
+
+Bei `Allowed : False` nicht weiterarbeiten. Diese Prüfung verhindert typische Netzwerk- und Downloadbefehle in den enthaltenen Diagnose-Skripten, ist aber kein Ersatz für Geräteschutz oder eine interne Datenschutzregel.
+
 ## Installation
 
 Für Codex:
