@@ -1,7 +1,6 @@
 # Offizielle Quellen
 
-Stand der Linkprüfung: 30. Juli 2026. Bei Treibern, Sicherheitsmeldungen,
-Supportfristen und aktuellen Windows-Oberflächen die Quelle erneut live prüfen.
+Stand der Linkprüfung: 2. August 2026. Bei Treibern, Sicherheitsmeldungen, Supportfristen und aktuellen Windows-Oberflächen die Quelle erneut live prüfen.
 
 ## Windows prüfen und wiederherstellen
 
@@ -9,42 +8,45 @@ Supportfristen und aktuellen Windows-Oberflächen die Quelle erneut live prüfen
 - [Windows-Abbild mit DISM reparieren](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/repair-a-windows-image?view=windows-11)
 - [CHKDSK](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/chkdsk)
 - [Recovery-Entscheidungshilfe](https://support.microsoft.com/en-us/windows/recovery-options-in-windows-31ce2444-7de3-818c-d626-e3b5a3024da5)
-- [Aktuelle Windows-Version über Windows Update reparieren](https://support.microsoft.com/en-us/windows/deployment/install-upgrade/fix-issues-by-reinstalling-the-current-version-of-windows)
-- [Point-in-time Restore](https://support.microsoft.com/en-us/windows/experience/backup-recovery/point-time-restore-for-windows)
 - [BitLocker-Wiederherstellungsschlüssel sichern](https://support.microsoft.com/en-us/windows/back-up-your-bitlocker-recovery-key-e63607b4-77fb-4ad3-8022-d6dc428fbd0d)
 
 ## Sicherheit
 
 - [Windows-Sicherheits-App](https://support.microsoft.com/en-us/windows/security/windows-security/stay-protected-with-the-windows-security-app)
 - [Defender-Scanarten und Offline-Scan](https://support.microsoft.com/en-us/windows/help-protect-my-pc-with-microsoft-defender-offline-9306d528-64bf-4668-5b80-ff533f183d6c)
+- [Defender Performance Analyzer](https://learn.microsoft.com/en-us/defender-endpoint/tune-performance-defender-antivirus)
+- [Microsoft Security Compliance Toolkit](https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/windows-security-configuration-framework/security-compliance-toolkit-10)
 - [Microsoft-Richtlinie zu Registry-Cleanern](https://support.microsoft.com/en-gb/topic/microsoft-support-policy-for-the-use-of-registry-cleaning-utilities-0485f4df-9520-3691-2461-7b0fd54e8b3a)
 
 ## Leistung, Speicher und Energie
 
 - [Storage Sense](https://support.microsoft.com/en-US/Windows/Experience/Storage-FileManagement/manage-drive-space-with-storage-sense)
-- [Speicherplatz freigeben](https://support.microsoft.com/en-US/Windows/Experience/Storage-FileManagement/free-up-drive-space-in-windows)
 - [Autostart konfigurieren](https://support.microsoft.com/en-us/windows/experience/startup-boot/configure-startup-applications-in-windows)
 - [Clean Boot](https://support.microsoft.com/en-US/Windows/Experience/Startup-Boot/how-to-perform-a-clean-boot-in-windows)
 - [Powercfg-Optionen](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options)
-- [Windows Performance Recorder: Grunddiagnose](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/recording-for-basic-system-diagnosis)
-- [Get-WinEvent](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent)
+- [Windows Performance Toolkit](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/)
+- [Windows Performance Analyzer](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer)
+- [Delivery Optimization](https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization-faq)
+
+## Microsoft Sysinternals
+
+- [Autoruns](https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns)
+- [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer)
+- [Process Monitor](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon)
+- [RAMMap](https://learn.microsoft.com/en-us/sysinternals/downloads/rammap)
 
 ## Treiber und Software
 
-- [Treiber über Gerätemanager aktualisieren oder zurückrollen](https://support.microsoft.com/en-us/windows/update-drivers-through-device-manager-in-windows-ec62f46c-ff14-c91d-eead-d7126dc1f7b6)
-- [Treiber über Windows Update](https://support.microsoft.com/en-US/Windows/Hardware/Drivers/automatically-get-recommended-and-updated-hardware-drivers)
+- [Treiber aktualisieren oder zurückrollen](https://support.microsoft.com/en-us/windows/update-drivers-through-device-manager-in-windows-ec62f46c-ff14-c91d-eead-d7126dc1f7b6)
 - [PnPUtil](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/pnputil-command-syntax)
 - [Get-AuthenticodeSignature](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/get-authenticodesignature)
 - [WinGet](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
-- [WinGet-Quellen](https://learn.microsoft.com/en-us/windows/package-manager/winget/source)
 
 ## Quellenhierarchie
 
 1. Microsoft-Dokumentation für Windows-Verhalten und Bordmittel.
-2. Exakte offizielle OEM-/Komponenten-Supportseite für ein konkretes Gerät.
+2. Exakte offizielle OEM-/Komponenten-Supportseite für das konkrete Gerät.
 3. Hersteller-Sicherheitsbulletin und Release Notes für ein konkretes Paket.
-4. Seriöse Sekundärquelle nur zur Einordnung, nie als alleinige Quelle für
-   einen riskanten Befehl oder Download.
+4. Seriöse Sekundärquelle nur zur Einordnung, nie als alleinige Quelle für einen riskanten Befehl oder Download.
 
-Wenn eine Quelle dem tatsächlichen Windows-Build oder OEM-Modell widerspricht,
-pausieren und die Abweichung erklären.
+Wenn eine Quelle dem tatsächlichen Windows-Build oder OEM-Modell widerspricht, pausieren und die Abweichung erklären.
