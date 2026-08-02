@@ -42,6 +42,14 @@ $requiredPaths = @(
     'skills\windows-pc-guru\references\programming-and-automation.md',
     'skills\windows-pc-guru\references\privacy-and-sensitive-data.md',
     'skills\windows-pc-guru\references\official-sources.md',
+    'skills\windows-pc-guru\references\optimization-decision-matrix.md',
+    'skills\windows-pc-guru\references\software-catalog.md',
+    'skills\windows-pc-guru\references\advanced-diagnostics.md',
+    'skills\windows-pc-guru\references\security-baseline-audit.md',
+    'skills\windows-pc-guru\profiles\office.md',
+    'skills\windows-pc-guru\profiles\development.md',
+    'skills\windows-pc-guru\profiles\laptop.md',
+    'skills\windows-pc-guru\profiles\gaming.md',
     'skills\windows-pc-guru\scripts\Get-WindowsPcSnapshot.ps1',
     'skills\windows-pc-guru\scripts\Test-DriverPackage.ps1',
     'skills\windows-pc-guru\assets\diagnosebericht-vorlage.md',
@@ -164,6 +172,13 @@ if ($RunDiagnosticsSmokeTest) {
         -Message 'Der Diagnose-Smoke-Test lieferte ein unerwartetes Schema.'
     Assert-True -Condition ($snapshot.PrivacyNotice -match 'Keine Benutzer') `
         -Message 'Der Diagnose-Smoke-Test enthält keinen Datenschutzhinweis.'
+
+    $baselineScript = Join-Path $skillRoot 'scripts\Measure-OptimizationBaseline.ps1'
+    $baseline = & $baselineScript -AsJson | ConvertFrom-Json
+    Assert-True -Condition ($baseline.SchemaVersion -eq '1.0') `
+        -Message 'Die Leistungs-Baseline lieferte ein unerwartetes Schema.'
+    Assert-True -Condition ($baseline.PrivacyNotice -match 'Keine Benutzer') `
+        -Message 'Die Leistungs-Baseline enthält keinen Datenschutzhinweis.'
 
     $driverScript = Join-Path $skillRoot 'scripts\Test-DriverPackage.ps1'
     $driverResult = & $driverScript -LiteralPath $driverScript -AsJson |
