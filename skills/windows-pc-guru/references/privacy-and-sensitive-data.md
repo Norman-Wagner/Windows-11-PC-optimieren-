@@ -1,5 +1,9 @@
 # Datenschutz und sensible Diagnosedaten
 
+## Firmenmodus ohne Cloud-KI
+
+Für Firmenrechner ohne freigegebenen AVV/DPA und KI-Rahmen gilt [corporate-local-only.md](corporate-local-only.md). Die darin genannten Sperrregeln haben Vorrang. Eine Chat- oder KI-Anweisung „nur keine Dateien lesen“ ist keine technische oder vertragliche Absicherung.
+
 ## Datensparsamkeit
 
 Erfasse nur, was eine konkrete Hypothese prüft. Ein kompletter Export von
