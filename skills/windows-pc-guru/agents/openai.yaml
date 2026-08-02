@@ -1,4 +1,4 @@
 interface:
   display_name: "Windows-PC-Guru"
-  short_description: "Windows 11 sicher diagnostizieren und reparieren"
-  default_prompt: "Nutze $windows-pc-guru, um meinen Windows-11-PC zuerst sicher zu diagnostizieren und erst nach meiner Freigabe gezielt zu reparieren."
+  short_description: "Windows 11 sicher diagnostizieren und gezielt optimieren"
+  default_prompt: "Nutze $windows-pc-guru, um meinen Windows-11-PC, seine Programme und mögliche Leistungsbremsen zuerst sicher zu prüfen. Empfiehl nur messbar begründete, reversible Optimierungen und warte vor Änderungen auf meine Freigabe."
