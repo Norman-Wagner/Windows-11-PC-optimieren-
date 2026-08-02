@@ -151,7 +151,16 @@ $runtimeScripts = Get-ChildItem -Path (Join-Path $skillRoot 'scripts') -File `
 $forbiddenRuntimePatterns = @(
     'Invoke-Expression',
     'Invoke-WebRequest',
+    'Invoke-RestMethod',
     'Start-BitsTransfer',
+    'System.Net.WebClient',
+    'System.Net.Http.HttpClient',
+    'curl.exe',
+    'wget.exe',
+    'ftp.exe',
+    'Start-Process',
+    'Enter-PSSession',
+    'New-PSSession',
     'Remove-Item',
     'Set-MpPreference',
     'Disable-WindowsOptionalFeature'
@@ -172,6 +181,8 @@ if ($RunDiagnosticsSmokeTest) {
         -Message 'Der Diagnose-Smoke-Test lieferte ein unerwartetes Schema.'
     Assert-True -Condition ($snapshot.PrivacyNotice -match 'Keine Benutzer') `
         -Message 'Der Diagnose-Smoke-Test enthält keinen Datenschutzhinweis.'
+    Assert-True -Condition (-not $snapshot.NetworkUsed) `
+        -Message 'Der Diagnose-Snapshot meldet unerwarteten Netzwerkzugriff.'
 
     $baselineScript = Join-Path $skillRoot 'scripts\Measure-OptimizationBaseline.ps1'
     $baseline = & $baselineScript -AsJson | ConvertFrom-Json
@@ -179,6 +190,14 @@ if ($RunDiagnosticsSmokeTest) {
         -Message 'Die Leistungs-Baseline lieferte ein unerwartetes Schema.'
     Assert-True -Condition ($baseline.PrivacyNotice -match 'Keine Benutzer') `
         -Message 'Die Leistungs-Baseline enthält keinen Datenschutzhinweis.'
+    Assert-True -Condition (-not $baseline.NetworkUsed) `
+        -Message 'Die Leistungs-Baseline meldet unerwarteten Netzwerkzugriff.'
+
+    $localOnlyPolicy = & (Join-Path $repositoryRoot 'scripts\\Test-LocalOnlyPolicy.ps1') -AsJson | ConvertFrom-Json
+    Assert-True -Condition $localOnlyPolicy.Allowed `
+        -Message 'Die Lokal-only-Pruefung hat ein verbotenes Laufzeitmuster gefunden.'
+    Assert-True -Condition (-not $localOnlyPolicy.NetworkUsed) `
+        -Message 'Die Lokal-only-Pruefung meldet unerwarteten Netzwerkzugriff.'
 
     $driverScript = Join-Path $skillRoot 'scripts\Test-DriverPackage.ps1'
     $driverResult = & $driverScript -LiteralPath $driverScript -AsJson |
