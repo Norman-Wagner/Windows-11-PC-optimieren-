@@ -9,7 +9,9 @@ Der Skill arbeitet symptomorientiert, verlangt vor Änderungen eine konkrete Fre
 Das Handbuch funktioniert vollständig ohne KI und ohne Zusatzsoftware: Alle
 Schritte nutzen Windows-Bordmittel und lassen sich von Hand abarbeiten.
 **Reihenfolge einhalten** – jeder Schritt baut auf dem vorherigen auf, und vor
-jeder Änderung existiert ein Backup und ein Rückweg.
+jeder Änderung existiert ein Backup und ein Rückweg. Wenig Zeit? Der
+[Schnellstart](SCHNELLSTART.md) liefert den Basisschutz in 60 Minuten. Den
+Fortschritt festhalten: [Fortschritts-Checkliste](vorlagen/fortschritts-checkliste.md).
 
 1. **Bestandsaufnahme** – erst lesen, nichts ändern: Hardware, Windows-Stand,
    Programme und Autostart erfassen und in die
@@ -41,9 +43,10 @@ jeder Änderung existiert ein Backup und ein Rückweg.
    Duplikate finden; verschieben statt löschen.
    → [Phase 6](06-ordnungssystem-dateien.md)
 8. **Nachmessen und Wartungsroutine festlegen** – Startzeit und Verhalten mit
-   der Bestandsaufnahme vergleichen, danach eine feste Routine: monatlich
-   Updates und Backup prüfen, vierteljährlich Autostart und Speicherplatz.
-   Optionale seriöse Werkzeuge dafür: [Ressourcen](ressourcen.md)
+   der Bestandsaufnahme vergleichen, danach die feste Routine: monatlich
+   30 Minuten, vierteljährlich 60 Minuten – mit lesenden Prüf-Skripten als
+   Abkürzung. Optionale seriöse Werkzeuge: [Ressourcen](ressourcen.md)
+   → [Phase 7](07-wartungsroutine.md)
 
 ## Was er kann
 
@@ -92,13 +95,32 @@ npx skills add Norman-Wagner/Windows-11-PC-optimieren- --skill windows-pc-guru
 
 Alternativ den Ordner `skills/windows-pc-guru` in ein Tool mit Agent-Skills-Unterstützung importieren. Die Skripte werden niemals automatisch ausgeführt.
 
-## Messung
+## Messung und Prüfberichte
 
 ```powershell
 pwsh -NoProfile -File .\skills\windows-pc-guru\scripts\Measure-OptimizationBaseline.ps1 -AsJson
 ```
 
 Das Skript verändert nichts und gibt keine Benutzer-, Computer-, Serien-, MAC-, IP-, Prozessnamen-, Dateipfad- oder Netzwerkdaten aus. Für einen gespeicherten Vergleich wird ein vom Nutzer gewählter Zielpfad benötigt.
+
+Zwei weitere lesende Berichte nach denselben Datenschutzregeln:
+
+```powershell
+# Schutzstatus mit Bewertung und Empfehlung je Prüfpunkt (Schritt 4 des Ablaufplans)
+pwsh -NoProfile -File .\skills\windows-pc-guru\scripts\Get-SecurityBaselineReport.ps1
+
+# Pflegezustand gegen feste Schwellwerte (Phase 7, Wartungsroutine)
+pwsh -NoProfile -File .\skills\windows-pc-guru\scripts\Get-MaintenanceStatus.ps1
+```
+
+## Roadmap und Qualitätssicherung
+
+Die Weiterentwicklung ist in der [ROADMAP](ROADMAP.md) mit Akzeptanzkriterien
+je Funktion dokumentiert, die Umsetzung in der [Aufgabenliste](AUFGABEN.md).
+Eine Pester-Testsuite unter [tests/](tests/) führt alle Diagnose-Skripte bei
+jedem Push auf echtem Windows aus und belegt: gültiges Schema, keine
+Netzwerkzugriffe, keine Dateiänderungen, keine Benutzer- oder Computernamen
+in der Ausgabe.
 
 ## Repository prüfen
 
