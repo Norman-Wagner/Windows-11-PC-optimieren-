@@ -1,5 +1,7 @@
 # Schnellstart: Basisschutz in 60 Minuten
 
+_English version: [QUICKSTART.md](QUICKSTART.md)_
+
 Für alle, die **jetzt** die wichtigsten Sicherheitsmaßnahmen umsetzen wollen
 und die sechs Phasen später nachholen. Alles mit Windows-Bordmitteln, ohne
 Adminkenntnisse, ohne Zusatzsoftware.

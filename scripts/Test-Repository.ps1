@@ -64,8 +64,10 @@ $requiredPaths = @(
     'ROADMAP.md',
     'AUFGABEN.md',
     'SCHNELLSTART.md',
+    'QUICKSTART.md',
     '07-wartungsroutine.md',
-    'vorlagen\fortschritts-checkliste.md'
+    'vorlagen\fortschritts-checkliste.md',
+    'vorlagen\vorher-nachher-vergleich.md'
 )
 
 foreach ($relativePath in $requiredPaths) {

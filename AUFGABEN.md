@@ -49,8 +49,21 @@ sind abgehakt; der Beleg ist jeweils die automatisierte Prüfung in der CI
 - [x] CI-Workflow: zusätzlicher `tests`-Job (Pester auf `windows-latest`)
   bei jedem Push und Pull Request.
 
+## M5: Ausbaustufe 2 (F7, F8, F9)
+
+- [x] F7: `-HtmlPath`/`-Force` in `Get-SecurityBaselineReport.ps1` –
+  eigenständige, druckbare HTML-Datei, HTML-kodiert, Überschreibschutz.
+- [x] F7: Pester-Test erzeugt und prüft die HTML-Datei auf echtem Windows
+  (Inhalt, Statuswerte, keine Benutzer-/Computernamen, Überschreibschutz).
+- [x] F8: `QUICKSTART.md` – englische Fassung des Schnellstarts mit
+  gegenseitiger Verlinkung.
+- [x] F9: `vorlagen/vorher-nachher-vergleich.md` – Vergleichsvorlage mit
+  Messregeln, ohne erfundene Referenzwerte.
+- [x] README, Roadmap, `Test-Repository.ps1` (Pflichtdateien) und
+  Struktur-Tests um die neuen Inhalte erweitert.
+
 ## Offene Ideen (nicht Teil dieser Roadmap)
 
-- [ ] Sammlung anonymisierter Vorher/Nachher-Baselines als Referenzwerte.
-- [ ] Übersetzung des Schnellstarts ins Englische.
-- [ ] HTML-Export des Sicherheitsberichts für den Ausdruck.
+- [ ] Community-Sammlung anonymisierter Vorher/Nachher-Baselines als
+  grobe Orientierungswerte (braucht echte, gespendete Messdaten).
+- [ ] Übersetzung des vollständigen Handbuchs ins Englische.

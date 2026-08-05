@@ -9,10 +9,17 @@ den Update-Stand. Jeder Prüfpunkt liefert Status und Empfehlung. Es werden
 keine Benutzer-, Computer-, Serien-, MAC-, IP-, Prozessnamen-, Dateipfad-
 oder Netzwerkdaten ausgegeben. Fehlende Rechte führen zum Status 'Unbekannt',
 niemals zum Abbruch.
+
+Mit -HtmlPath wird der Bericht zusätzlich als druckbare, eigenständige
+HTML-Datei an den vom Nutzer gewählten Pfad geschrieben (keine externen
+Ressourcen, keine Skripte). Eine vorhandene Datei wird nur mit -Force
+überschrieben.
 #>
 [CmdletBinding()]
 param(
-    [switch]$AsJson
+    [switch]$AsJson,
+    [string]$HtmlPath,
+    [switch]$Force
 )
 
 Set-StrictMode -Version Latest
@@ -243,7 +250,65 @@ $report = [pscustomobject][ordered]@{
     Interpretation = 'Warnungen sind Prüfaufträge, keine Diagnosen. Unbekannt bedeutet meist: nur mit Adminrechten oder manuell prüfbar. Vor jeder Änderung gilt Phase 2 (Backup).'
 }
 
-if ($AsJson) {
+if (-not [string]::IsNullOrWhiteSpace($HtmlPath)) {
+    $fullHtmlPath = [System.IO.Path]::GetFullPath($HtmlPath)
+    if (@('.html', '.htm') -notcontains [System.IO.Path]::GetExtension($fullHtmlPath).ToLowerInvariant()) {
+        throw 'Der HTML-Pfad muss auf .html oder .htm enden.'
+    }
+    $parentPath = Split-Path -Parent $fullHtmlPath
+    if (-not (Test-Path -LiteralPath $parentPath -PathType Container)) {
+        throw "Der Zielordner existiert nicht: $parentPath"
+    }
+    if ((Test-Path -LiteralPath $fullHtmlPath) -and -not $Force) {
+        throw 'Die Ausgabedatei existiert bereits. Zum Überschreiben -Force verwenden.'
+    }
+
+    $statusColors = @{ OK = '#1a7f37'; Warnung = '#b35900'; Unbekannt = '#57606a' }
+    $rows = foreach ($check in $checks) {
+        $color = $statusColors[$check.Status]
+        '<tr><td>{0}</td><td style="color:{1};font-weight:bold">{2}</td><td>{3}</td><td>{4}</td></tr>' -f `
+            [System.Net.WebUtility]::HtmlEncode($check.Bereich), $color, `
+            [System.Net.WebUtility]::HtmlEncode($check.Status), `
+            [System.Net.WebUtility]::HtmlEncode($check.Befund), `
+            [System.Net.WebUtility]::HtmlEncode($check.Empfehlung)
+    }
+
+    $html = @"
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Sicherheitsbericht Windows 11</title>
+<style>
+body { font-family: "Segoe UI", Arial, sans-serif; margin: 2rem; color: #1f2328; }
+h1 { font-size: 1.4rem; } h2 { font-size: 1.1rem; }
+table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+th, td { border: 1px solid #d0d7de; padding: 0.5rem 0.6rem; text-align: left; vertical-align: top; }
+th { background: #f6f8fa; }
+p.meta { color: #57606a; font-size: 0.9rem; }
+@media print { body { margin: 1rem; } }
+</style>
+</head>
+<body>
+<h1>Sicherheitsbericht Windows 11</h1>
+<p class="meta">Erstellt (UTC): $([System.Net.WebUtility]::HtmlEncode($report.CollectedAtUtc))<br>
+$([System.Net.WebUtility]::HtmlEncode($report.PrivacyNotice))</p>
+<h2>Zusammenfassung: $($summary.OkCount) OK &middot; $($summary.WarnungCount) Warnung(en) &middot; $($summary.UnbekanntCount) Unbekannt</h2>
+<table>
+<tr><th>Bereich</th><th>Status</th><th>Befund</th><th>Empfehlung</th></tr>
+$($rows -join "`n")
+</table>
+<p class="meta">$([System.Net.WebUtility]::HtmlEncode($report.Interpretation))</p>
+</body>
+</html>
+"@
+
+    Set-Content -LiteralPath $fullHtmlPath -Value $html -Encoding UTF8
+    [pscustomobject]@{
+        HtmlPath = $fullHtmlPath
+        Bytes = (Get-Item -LiteralPath $fullHtmlPath).Length
+    }
+} elseif ($AsJson) {
     $report | ConvertTo-Json -Depth 6
 } else {
     $report

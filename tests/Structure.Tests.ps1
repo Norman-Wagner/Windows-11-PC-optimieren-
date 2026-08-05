@@ -14,8 +14,10 @@ Describe 'Pflichtdateien' {
         'ROADMAP.md'
         'AUFGABEN.md'
         'SCHNELLSTART.md'
+        'QUICKSTART.md'
         '07-wartungsroutine.md'
         'vorlagen/fortschritts-checkliste.md'
+        'vorlagen/vorher-nachher-vergleich.md'
         'skills/windows-pc-guru/SKILL.md'
         'skills/windows-pc-guru/scripts/Get-WindowsPcSnapshot.ps1'
         'skills/windows-pc-guru/scripts/Measure-OptimizationBaseline.ps1'
@@ -90,8 +92,10 @@ Describe 'Neue Dokumente' {
         'ROADMAP.md'
         'AUFGABEN.md'
         'SCHNELLSTART.md'
+        'QUICKSTART.md'
         '07-wartungsroutine.md'
         'vorlagen/fortschritts-checkliste.md'
+        'vorlagen/vorher-nachher-vergleich.md'
     ) {
         $text = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $script:repositoryRoot $_)
         $text | Should -Not -Match '(?i)\bTODO\b|PLACEHOLDER|\bTBD\b'
@@ -120,5 +124,24 @@ Describe 'Neue Dokumente' {
         $quickstart = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $script:repositoryRoot 'SCHNELLSTART.md')
         ([regex]::Matches($quickstart, '(?m)^## Schritt \d+')).Count |
             Should -BeLessOrEqual 7
+    }
+
+    It 'der englische Quick Start spiegelt den Schnellstart' {
+        $quickstartDe = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $script:repositoryRoot 'SCHNELLSTART.md')
+        $quickstartEn = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $script:repositoryRoot 'QUICKSTART.md')
+        $stepsEn = ([regex]::Matches($quickstartEn, '(?m)^## Step \d+')).Count
+        $stepsDe = ([regex]::Matches($quickstartDe, '(?m)^## Schritt \d+')).Count
+        $stepsEn | Should -Be $stepsDe
+        $quickstartEn | Should -Match 'SCHNELLSTART\.md'
+        $quickstartDe | Should -Match 'QUICKSTART\.md'
+    }
+
+    It 'die Vergleichsvorlage verspricht keine Pauschal-Referenzwerte' {
+        $vergleich = Get-Content -Raw -Encoding UTF8 -LiteralPath (
+            Join-Path $script:repositoryRoot 'vorlagen/vorher-nachher-vergleich.md'
+        )
+        $vergleich | Should -Match 'keine mitgelieferten Referenzwerte'
+        $vergleich | Should -Match 'Vorher'
+        $vergleich | Should -Match 'Nachher'
     }
 }

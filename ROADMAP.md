@@ -128,6 +128,55 @@ dagegen geprüft.
 
 ---
 
+## Ausbaustufe 2
+
+## F7: Druckbarer HTML-Export des Sicherheitsberichts
+
+**Nutzen:** Der Sicherheitsbericht lässt sich ausdrucken oder ablegen – etwa
+um den Zustand vor und nach den Maßnahmen zu dokumentieren oder den Bericht
+einem Helfer zu geben, ohne dass dieser PowerShell lesen muss.
+
+**Akzeptanzkriterien:**
+
+- [x] `Get-SecurityBaselineReport.ps1 -HtmlPath <pfad>` schreibt eine
+  eigenständige HTML-Datei ohne externe Ressourcen und ohne Skripte.
+- [x] Der Pfad wird vom Nutzer gewählt; eine vorhandene Datei wird nur mit
+  `-Force` überschrieben; falsche Endungen werden abgelehnt.
+- [x] Alle Inhalte sind HTML-kodiert; die Datei enthält weder Benutzer-
+  noch Computernamen.
+- [x] Ein Pester-Test erzeugt die Datei auf echtem Windows und prüft
+  Inhalt und Datenschutz.
+
+## F8: Englischer Schnellstart (`QUICKSTART.md`)
+
+**Nutzen:** Der Basisschutz wird auch für nicht deutschsprachige Nutzer
+zugänglich – etwa in gemischtsprachigen Familien oder Firmen.
+
+**Akzeptanzkriterien:**
+
+- [x] Vollständige englische Fassung des Schnellstarts mit denselben
+  Schritten und Zeitangaben, maximal 7 Schritte.
+- [x] Beide Fassungen verweisen aufeinander; der Hinweis, dass die
+  Phasen-Anleitungen deutsch sind, ist enthalten.
+- [x] Struktur-Test prüft Existenz und Schrittzahl.
+
+## F9: Vorher/Nachher-Vergleichsvorlage (`vorlagen/vorher-nachher-vergleich.md`)
+
+**Nutzen:** Verbesserungen werden belegt statt behauptet: eine Vorlage, die
+Vorher- und Nachher-Messung nebeneinanderstellt – mit Messregeln für einen
+fairen Vergleich und ohne erfundene Referenzwerte.
+
+**Akzeptanzkriterien:**
+
+- [x] Tabelle mit den Messwerten aus Baseline, Sicherheits- und
+  Wartungsbericht, je mit Quelle und Vorher/Nachher-Spalten.
+- [x] Dokumentierte Messregeln (gleicher Zustand, Neustart, Strommodus).
+- [x] Ausdrücklicher Hinweis, dass keine Pauschal-Referenzwerte
+  mitgeliefert werden und warum.
+- [x] Aus Phase 1 und Phase 5 heraus auffindbar (README-Verweis).
+
+---
+
 ## Meilensteine
 
 | Meilenstein | Inhalt | Status |
@@ -136,6 +185,7 @@ dagegen geprüft.
 | M2 | F1 + F2 (Audit- und Wartungs-Skript) | erledigt |
 | M3 | F3 + F4 + F5 (Wartungsroutine, Schnellstart, Checkliste) | erledigt |
 | M4 | F6 (Pester-Testsuite, CI-Erweiterung) | erledigt |
+| M5 | F7 + F8 + F9 (HTML-Export, englischer Schnellstart, Vergleichsvorlage) | erledigt |
 
 Die detaillierte Aufgabenliste mit allen Einzelschritten steht in
 [AUFGABEN.md](AUFGABEN.md).

@@ -10,8 +10,10 @@ Das Handbuch funktioniert vollständig ohne KI und ohne Zusatzsoftware: Alle
 Schritte nutzen Windows-Bordmittel und lassen sich von Hand abarbeiten.
 **Reihenfolge einhalten** – jeder Schritt baut auf dem vorherigen auf, und vor
 jeder Änderung existiert ein Backup und ein Rückweg. Wenig Zeit? Der
-[Schnellstart](SCHNELLSTART.md) liefert den Basisschutz in 60 Minuten. Den
-Fortschritt festhalten: [Fortschritts-Checkliste](vorlagen/fortschritts-checkliste.md).
+[Schnellstart](SCHNELLSTART.md) liefert den Basisschutz in 60 Minuten
+(English: [Quick Start](QUICKSTART.md)). Den Fortschritt festhalten:
+[Fortschritts-Checkliste](vorlagen/fortschritts-checkliste.md); Verbesserungen
+belegen: [Vorher/Nachher-Vergleich](vorlagen/vorher-nachher-vergleich.md).
 
 1. **Bestandsaufnahme** – erst lesen, nichts ändern: Hardware, Windows-Stand,
    Programme und Autostart erfassen und in die
@@ -108,6 +110,9 @@ Zwei weitere lesende Berichte nach denselben Datenschutzregeln:
 ```powershell
 # Schutzstatus mit Bewertung und Empfehlung je Prüfpunkt (Schritt 4 des Ablaufplans)
 pwsh -NoProfile -File .\skills\windows-pc-guru\scripts\Get-SecurityBaselineReport.ps1
+
+# Derselbe Bericht als druckbare HTML-Datei (Zielpfad selbst wählen)
+pwsh -NoProfile -File .\skills\windows-pc-guru\scripts\Get-SecurityBaselineReport.ps1 -HtmlPath "$env:USERPROFILE\Documents\sicherheitsbericht.html"
 
 # Pflegezustand gegen feste Schwellwerte (Phase 7, Wartungsroutine)
 pwsh -NoProfile -File .\skills\windows-pc-guru\scripts\Get-MaintenanceStatus.ps1

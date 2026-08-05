@@ -66,6 +66,30 @@ Describe 'Sicherheitsbericht (Get-SecurityBaselineReport.ps1)' -Skip:(-not $scri
         Assert-CheckReport -Parsed $script:securityReport
     }
 
+    It 'exportiert einen druckbaren HTML-Bericht ohne Namen und mit Überschreibschutz' {
+        $htmlPath = Join-Path $TestDrive 'sicherheitsbericht.html'
+        $result = & (Join-Path $script:skillScriptsPath 'Get-SecurityBaselineReport.ps1') -HtmlPath $htmlPath
+        $result.HtmlPath | Should -Be $htmlPath
+        $htmlPath | Should -Exist
+
+        $html = Get-Content -Raw -Encoding UTF8 -LiteralPath $htmlPath
+        $html | Should -Match '<!DOCTYPE html>'
+        $html | Should -Match 'Sicherheitsbericht Windows 11'
+        $html | Should -Match 'Zusammenfassung'
+        $html | Should -Not -Match '<script'
+        $html | Should -Not -Match 'https?://'
+        foreach ($name in @($env:USERNAME, $env:COMPUTERNAME)) {
+            if (-not [string]::IsNullOrWhiteSpace($name) -and $name.Length -ge 4) {
+                $html | Should -Not -Match ([regex]::Escape($name))
+            }
+        }
+
+        { & (Join-Path $script:skillScriptsPath 'Get-SecurityBaselineReport.ps1') -HtmlPath $htmlPath } |
+            Should -Throw -ExpectedMessage '*-Force*'
+        { & (Join-Path $script:skillScriptsPath 'Get-SecurityBaselineReport.ps1') -HtmlPath (Join-Path $TestDrive 'bericht.txt') } |
+            Should -Throw -ExpectedMessage '*.html*'
+    }
+
     It 'prüft die zentralen Sicherheitsbereiche' {
         $bereiche = @($script:securityReport.Checks | ForEach-Object { $_.Bereich })
         ($bereiche -join ' ') | Should -Match 'Defender'
