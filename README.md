@@ -4,6 +4,47 @@ Ein sicherer, deutschsprachiger Agent-Skill für Windows 11: Diagnose, Leistungs
 
 Der Skill arbeitet symptomorientiert, verlangt vor Änderungen eine konkrete Freigabe und akzeptiert eine Verbesserung erst nach einer passenden Nachmessung.
 
+## Ablaufplan: Maximale Sicherheit und Optimierung – ganz ohne KI
+
+Das Handbuch funktioniert vollständig ohne KI und ohne Zusatzsoftware: Alle
+Schritte nutzen Windows-Bordmittel und lassen sich von Hand abarbeiten.
+**Reihenfolge einhalten** – jeder Schritt baut auf dem vorherigen auf, und vor
+jeder Änderung existiert ein Backup und ein Rückweg.
+
+1. **Bestandsaufnahme** – erst lesen, nichts ändern: Hardware, Windows-Stand,
+   Programme und Autostart erfassen und in die
+   [Checkliste](vorlagen/bestandsaufnahme-checkliste.md) eintragen.
+   → [Phase 1](01-bestandsaufnahme.md)
+2. **Backup und Rückweg schaffen** – Daten nach dem 3-2-1-Prinzip sichern,
+   Wiederherstellungspunkt anlegen, Wiederherstellungslaufwerk erstellen.
+   Ohne diesen Schritt beginnt keine Reparatur.
+   → [Phase 2](02-backup-plan.md)
+3. **Windows aktualisieren und reparieren** – alle Sicherheitsupdates
+   installieren, Systemdateien mit `sfc` und `DISM` prüfen, Datenträger und
+   Ereignisprotokoll kontrollieren.
+   → [Phase 3](03-windows-pruefen-reparieren.md)
+4. **Sicherheit prüfen und härten** – Windows-Sicherheit komplett durchgehen:
+   Viren- & Bedrohungsschutz, Firewall, SmartScreen, Gerätesicherheit
+   (Secure Boot, TPM), BitLocker-Status und Benutzerkonten. Nichts davon
+   abschalten – fehlenden Schutz aktivieren.
+   → [Phase 3, Abschnitt 3.2](03-windows-pruefen-reparieren.md) und
+   [Sicherheits-Audit](skills/windows-pc-guru/references/security-baseline-audit.md)
+5. **Treiber gezielt aktualisieren** – nur über Windows Update und offizielle
+   Hersteller-Websites, einen Treiber nach dem anderen, mit Neustart und Test
+   dazwischen. Keine Driver-Booster.
+   → [Phase 4](04-treiber-aktualisieren.md)
+6. **Aufräumen und optimieren** – überflüssige Programme nach Freigabe
+   deinstallieren, Autostart entschlacken, Speicherplatz freigeben. Keine
+   Registry-Cleaner, keine Tuning-Suiten.
+   → [Phase 5](05-aufraeumen-optimieren.md)
+7. **Dateien ordnen** – Privat und Dienstlich trennen, Fotos sortieren,
+   Duplikate finden; verschieben statt löschen.
+   → [Phase 6](06-ordnungssystem-dateien.md)
+8. **Nachmessen und Wartungsroutine festlegen** – Startzeit und Verhalten mit
+   der Bestandsaufnahme vergleichen, danach eine feste Routine: monatlich
+   Updates und Backup prüfen, vierteljährlich Autostart und Speicherplatz.
+   Optionale seriöse Werkzeuge dafür: [Ressourcen](ressourcen.md)
+
 ## Was er kann
 
 - langsame, instabile oder nicht startende Windows-11-PCs eingrenzen;
