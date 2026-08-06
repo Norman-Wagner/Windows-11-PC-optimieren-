@@ -53,10 +53,22 @@ $requiredPaths = @(
     'skills\windows-pc-guru\profiles\gaming.md',
     'skills\windows-pc-guru\scripts\Get-WindowsPcSnapshot.ps1',
     'skills\windows-pc-guru\scripts\Test-DriverPackage.ps1',
+    'skills\windows-pc-guru\scripts\Get-SecurityBaselineReport.ps1',
+    'skills\windows-pc-guru\scripts\Get-MaintenanceStatus.ps1',
     'skills\windows-pc-guru\assets\diagnosebericht-vorlage.md',
     'skills\windows-pc-guru\assets\aenderungsplan-vorlage.md',
     'scripts\Build-SkillPackage.ps1',
-    'tests\behavior-cases.md'
+    'tests\behavior-cases.md',
+    'tests\Structure.Tests.ps1',
+    'tests\Diagnostics.Tests.ps1',
+    'ROADMAP.md',
+    'AUFGABEN.md',
+    'SCHNELLSTART.md',
+    'QUICKSTART.md',
+    'pinguin-anleitung.html',
+    '07-wartungsroutine.md',
+    'vorlagen\fortschritts-checkliste.md',
+    'vorlagen\vorher-nachher-vergleich.md'
 )
 
 foreach ($relativePath in $requiredPaths) {
@@ -199,6 +211,29 @@ if ($RunDiagnosticsSmokeTest) {
         -Message 'Die Lokal-only-Pruefung hat ein verbotenes Laufzeitmuster gefunden.'
     Assert-True -Condition (-not $localOnlyPolicy.NetworkUsed) `
         -Message 'Die Lokal-only-Pruefung meldet unerwarteten Netzwerkzugriff.'
+
+    $allowedStatuses = @('OK', 'Warnung', 'Unbekannt')
+    foreach ($reportScriptName in @('Get-SecurityBaselineReport.ps1', 'Get-MaintenanceStatus.ps1')) {
+        $reportScript = Join-Path $skillRoot "scripts\$reportScriptName"
+        $report = & $reportScript -AsJson | ConvertFrom-Json
+        Assert-True -Condition ($report.SchemaVersion -eq '1.0') `
+            -Message "$reportScriptName lieferte ein unerwartetes Schema."
+        Assert-True -Condition ($report.PrivacyNotice -match 'Keine Benutzer') `
+            -Message "$reportScriptName enthält keinen Datenschutzhinweis."
+        Assert-True -Condition (-not $report.NetworkUsed) `
+            -Message "$reportScriptName meldet unerwarteten Netzwerkzugriff."
+        Assert-True -Condition (-not $report.FilesChanged) `
+            -Message "$reportScriptName meldet unerwartete Dateiänderungen."
+        $reportChecks = @($report.Checks)
+        Assert-True -Condition ($reportChecks.Count -ge 5) `
+            -Message "$reportScriptName lieferte zu wenige Prüfpunkte."
+        foreach ($reportCheck in $reportChecks) {
+            Assert-True -Condition ($allowedStatuses -contains $reportCheck.Status) `
+                -Message "$reportScriptName lieferte einen unerlaubten Status: $($reportCheck.Status)"
+        }
+        Assert-True -Condition ($report.Summary.CheckCount -eq $reportChecks.Count) `
+            -Message "$reportScriptName hat eine inkonsistente Zusammenfassung."
+    }
 
     $driverScript = Join-Path $skillRoot 'scripts\Test-DriverPackage.ps1'
     $driverResult = & $driverScript -LiteralPath $driverScript -AsJson |

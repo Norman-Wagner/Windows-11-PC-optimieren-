@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Der Pinguin führt dich durch: Windows 11 sicher und aufgeräumt</title>
+<meta name="description" content="Die Anleitung zum Ansehen und Anhören. Acht Schritte, ohne KI, ohne Zusatzsoftware, ohne Internetverbindung.">
+<style>
+  :root {
+    color-scheme: light dark;
+
+    --bg:        #F4F8FA;
+    --bg-elev:   #FFFFFF;
+    --bg-sunk:   #E7F0F4;
+    --ink:       #0F212B;
+    --ink-soft:  #47616F;
+    --ink-faint: #7794A3;
+    --line:      #D3E2E9;
+    --line-soft: #E4EEF2;
+    --accent:    #C46611;
+    --accent-ink:#8A4708;
+    --accent-bg: #FAEEE1;
+    --cold:      #24697F;
+    --cold-bg:   #E2EFF3;
+    --ok:        #256A58;
+    --shadow:    0 1px 2px rgba(15,33,43,.05), 0 8px 24px -12px rgba(15,33,43,.22);
+    --shadow-lift:0 2px 4px rgba(15,33,43,.06), 0 18px 40px -16px rgba(15,33,43,.3);
+
+    --snow-1: #FFFFFF;
+    --snow-2: #DCEAF0;
+    --sky-1:  #DCEAF1;
+    --sky-2:  #F4F8FA;
+    --penguin-body: #17242D;
+    --penguin-belly:#FBFDFE;
+
+    --display: Georgia, "Iowan Old Style", "Times New Roman", "Liberation Serif", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    --s--1: .8125rem;
+    --s-0:  1.0625rem;
+    --s-1:  1.25rem;
+    --s-2:  1.6rem;
+    --s-3:  2.15rem;
+    --s-4:  clamp(2.5rem, 7.5vw, 4.25rem);
+
+    --rail: 4.5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:        #08161F;
+      --bg-elev:   #0F2431;
+      --bg-sunk:   #0B1D27;
+      --ink:       #E8F2F6;
+      --ink-soft:  #A3BCC7;
+      --ink-faint: #6E8B99;
+      --line:      #1D3B4A;
+      --line-soft: #16303D;
+      --accent:    #F0A052;
+      --accent-ink:#F7BE81;
+      --accent-bg: #2A1B0F;
+      --cold:      #5FB7D0;
+      --cold-bg:   #102C39;
+      --ok:        #55BC9C;
+      --shadow:    0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+      --shadow-lift:0 2px 4px rgba(0,0,0,.45), 0 18px 40px -16px rgba(0,0,0,.8);
+
+      --snow-1: #16303D;
+      --snow-2: #0B1D27;
+      --sky-1:  #0D2230;
+      --sky-2:  #08161F;
+      --penguin-body: #0C1920;
+      --penguin-belly:#EAF4F8;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg:        #08161F;
+    --bg-elev:   #0F2431;
+    --bg-sunk:   #0B1D27;
+    --ink:       #E8F2F6;
+    --ink-soft:  #A3BCC7;
+    --ink-faint: #6E8B99;
+    --line:      #1D3B4A;
+    --line-soft: #16303D;
+    --accent:    #F0A052;
+    --accent-ink:#F7BE81;
+    --accent-bg: #2A1B0F;
+    --cold:      #5FB7D0;
+    --cold-bg:   #102C39;
+    --ok:        #55BC9C;
+    --shadow:    0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+    --shadow-lift:0 2px 4px rgba(0,0,0,.45), 0 18px 40px -16px rgba(0,0,0,.8);
+    --snow-1: #16303D;
+    --snow-2: #0B1D27;
+    --sky-1:  #0D2230;
+    --sky-2:  #08161F;
+    --penguin-body: #0C1920;
+    --penguin-belly:#EAF4F8;
+  }
+
+  :root[data-theme="light"] {
+    --bg:        #F4F8FA;
+    --bg-elev:   #FFFFFF;
+    --bg-sunk:   #E7F0F4;
+    --ink:       #0F212B;
+    --ink-soft:  #47616F;
+    --ink-faint: #7794A3;
+    --line:      #D3E2E9;
+    --line-soft: #E4EEF2;
+    --accent:    #C46611;
+    --accent-ink:#8A4708;
+    --accent-bg: #FAEEE1;
+    --cold:      #24697F;
+    --cold-bg:   #E2EFF3;
+    --ok:        #256A58;
+    --shadow:    0 1px 2px rgba(15,33,43,.05), 0 8px 24px -12px rgba(15,33,43,.22);
+    --shadow-lift:0 2px 4px rgba(15,33,43,.06), 0 18px 40px -16px rgba(15,33,43,.3);
+    --snow-1: #FFFFFF;
+    --snow-2: #DCEAF0;
+    --sky-1:  #DCEAF1;
+    --sky-2:  #F4F8FA;
+    --penguin-body: #17242D;
+    --penguin-belly:#FBFDFE;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--s-0);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  a { color: var(--cold); text-underline-offset: .18em; text-decoration-thickness: 1px; }
+  a:hover { color: var(--accent); }
+
+  :focus-visible {
+    outline: 2.5px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .wrap { width: min(100% - 2.5rem, 63rem); margin-inline: auto; }
+  .prose { max-width: 40rem; }
+
+  .label {
+    font-size: .69rem;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+    font-weight: 650;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Kopfbereich ---------- */
+
+  .hero {
+    position: relative;
+    background: linear-gradient(178deg, var(--sky-1) 0%, var(--sky-2) 72%);
+    border-bottom: 1px solid var(--line-soft);
+    overflow: hidden;
+    padding-block: clamp(2rem, 5vw, 3.5rem) 0;
+  }
+
+  #snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    grid-template-columns: 1fr;
+    align-items: end;
+  }
+  @media (min-width: 56rem) {
+    .hero-grid { grid-template-columns: 1.15fr .85fr; }
+  }
+
+  .hero-text { display: flex; flex-direction: column; gap: 1.1rem; padding-bottom: clamp(2rem, 5vw, 3.5rem); }
+
+  h1 {
+    font-size: var(--s-4);
+    line-height: 1.02;
+    letter-spacing: -.022em;
+  }
+  h1 .thin { display: block; font-style: italic; font-weight: 400; color: var(--ink-soft); font-size: .46em; letter-spacing: 0; margin-bottom: .5rem; line-height: 1.25; }
+
+  .lede { font-size: var(--s-1); color: var(--ink-soft); max-width: 34rem; line-height: 1.5; }
+
+  .hero-figure { position: relative; display: flex; justify-content: center; align-items: flex-end; }
+  .penguin { width: min(100%, 20rem); height: auto; display: block; filter: drop-shadow(0 18px 26px rgba(9,32,44,.22)); }
+
+  .speech {
+    position: absolute;
+    top: 4%;
+    left: 50%;
+    transform: translateX(-42%) translateY(-8px);
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: 1.1rem 1.1rem 1.1rem .25rem;
+    padding: .5rem .85rem;
+    font-size: var(--s--1);
+    color: var(--ink-soft);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transition: opacity .35s ease, transform .35s ease;
+    pointer-events: none;
+    max-width: 15rem;
+  }
+  .speaking-now .speech { opacity: 1; transform: translateX(-42%) translateY(-16px); }
+
+  /* ---------- Bedienleiste ---------- */
+
+  .player {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--bg-elev) 88%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
+    border-bottom: 1px solid var(--line);
+  }
+  .player-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem .9rem;
+    padding-block: .7rem;
+  }
+
+  button {
+    font: inherit;
+    font-size: var(--s--1);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-elev);
+    color: var(--ink);
+    padding: .5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+  }
+  button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-ink); }
+  button:active:not(:disabled) { transform: translateY(1px); }
+  button:disabled { opacity: .42; cursor: not-allowed; }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #FFF8F0;
+    padding: .62rem 1.35rem;
+    font-size: var(--s-0);
+  }
+  :root[data-theme="dark"] .btn-primary, :root:not([data-theme="light"]) .btn-primary { color: #1A0F04; }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .btn-primary { color: #FFF8F0; } }
+  .btn-primary:hover:not(:disabled) { background: var(--accent-ink); border-color: var(--accent-ink); color: #FFF8F0; }
+
+  .btn-hero { font-size: var(--s-1); padding: .8rem 1.7rem; }
+
+  .player-status {
+    font-size: var(--s--1);
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+  }
+  .dot { width: .5rem; height: .5rem; border-radius: 50%; background: var(--ink-faint); flex: none; }
+  .is-playing .dot { background: var(--accent); animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+  .speed { display: flex; align-items: center; gap: .45rem; font-size: var(--s--1); color: var(--ink-soft); }
+  .speed input { accent-color: var(--accent); width: 5.5rem; }
+
+  /* ---------- Abschnitte ---------- */
+
+  main { padding-block: clamp(1rem, 2.5vw, 1.75rem) 0; }
+
+  section { scroll-margin-top: 5.5rem; }
+
+  .band { padding-block: clamp(2.25rem, 5vw, 3.75rem); }
+  .band + .band { border-top: 1px solid var(--line-soft); }
+  .band-sunk { background: var(--bg-sunk); border-top: 1px solid var(--line-soft); }
+
+  .band-head { display: flex; flex-direction: column; gap: .7rem; margin-bottom: 1.75rem; }
+  .band-head h2 { font-size: var(--s-3); letter-spacing: -.015em; line-height: 1.15; }
+  .band-head p { color: var(--ink-soft); max-width: 38rem; }
+
+  /* Eisspur mit Stationen */
+
+  .trail { position: relative; display: flex; flex-direction: column; gap: 1rem; }
+  @media (min-width: 48rem) {
+    .trail { padding-left: var(--rail); }
+    .trail::before {
+      content: "";
+      position: absolute;
+      left: calc(var(--rail) / 2 - 1px);
+      top: 1.5rem;
+      bottom: 1.5rem;
+      width: 2px;
+      background: repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 14px);
+    }
+  }
+
+  .stop {
+    position: relative;
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: .9rem;
+    padding: 1.15rem 1.3rem;
+    box-shadow: var(--shadow);
+    transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+  }
+  .stop.speaking { border-color: var(--accent); box-shadow: var(--shadow-lift); }
+  .stop.speaking::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid var(--accent);
+    opacity: .35;
+    pointer-events: none;
+  }
+
+  .stop-mark {
+    position: absolute;
+    left: calc(var(--rail) * -1 + .35rem);
+    top: 1.1rem;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    display: none;
+    place-items: center;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    font-family: var(--display);
+    font-size: var(--s-1);
+    font-weight: 700;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  @media (min-width: 48rem) { .stop-mark { display: grid; } }
+  .stop.speaking .stop-mark { background: var(--accent); border-color: var(--accent); color: #FFF8F0; }
+  :root[data-theme="dark"] .stop.speaking .stop-mark { color: #1A0F04; }
+
+  .stop-top { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; margin-bottom: .4rem; }
+  .stop-num { font-family: var(--display); font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  @media (min-width: 48rem) { .stop-num { display: none; } }
+  .stop h3 { font-size: var(--s-1); letter-spacing: -.01em; }
+  .stop-body { color: var(--ink-soft); margin-top: .35rem; max-width: 62ch; }
+  .stop-foot { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .85rem; margin-top: .85rem; }
+
+  .chip {
+    font-size: .72rem;
+    letter-spacing: .04em;
+    font-weight: 650;
+    padding: .22rem .6rem;
+    border-radius: 999px;
+    background: var(--cold-bg);
+    color: var(--cold);
+    white-space: nowrap;
+  }
+  .chip-rule { background: var(--accent-bg); color: var(--accent-ink); }
+  :root[data-theme="dark"] .chip-rule { color: var(--accent); }
+
+  .say-btn { padding: .34rem .8rem; font-size: .78rem; font-weight: 600; }
+  .say-btn svg { width: .9rem; height: .9rem; flex: none; }
+
+  .doc-link { font-size: var(--s--1); font-weight: 600; }
+
+  /* Karten */
+
+  .cards { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  .cards > * { min-width: 0; }
+  @media (min-width: 42rem) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 62rem) { .cards-3 { grid-template-columns: repeat(3, 1fr); } }
+
+  .card {
+    min-width: 0;
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: .9rem;
+    padding: 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    box-shadow: var(--shadow);
+  }
+  .card h3 { font-size: var(--s-1); }
+  .card p { color: var(--ink-soft); font-size: var(--s--1); line-height: 1.6; }
+  .card .label { color: var(--cold); }
+
+  code, .code {
+    font-family: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: .84em;
+  }
+  .code-block {
+    background: var(--bg-sunk);
+    border: 1px solid var(--line-soft);
+    border-radius: .55rem;
+    padding: .7rem .85rem;
+    overflow-x: auto;
+    max-width: 100%;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.5;
+  }
+  .band-sunk .code-block { background: var(--bg); }
+
+  ul.plain { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .6rem; }
+  ul.plain li { display: flex; gap: .65rem; align-items: flex-start; color: var(--ink-soft); }
+  ul.plain .tick { flex: none; margin-top: .42em; width: .55rem; height: .55rem; border-radius: 50%; background: var(--cold); }
+  .no-list .tick { background: transparent; border: 1.5px solid var(--ink-faint); position: relative; border-radius: 50%; }
+  .no-list .tick::after {
+    content: ""; position: absolute; inset: 50% -2px auto -2px; height: 1.5px; background: var(--ink-faint); transform: rotate(-45deg);
+  }
+
+  .note {
+    border-left: 2.5px solid var(--accent);
+    padding: .15rem 0 .15rem 1rem;
+    color: var(--ink-soft);
+    font-size: var(--s--1);
+    max-width: 38rem;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-block: 2.25rem 3rem;
+    color: var(--ink-faint);
+    font-size: var(--s--1);
+    background: var(--bg-sunk);
+  }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; align-items: flex-start; }
+
+  /* Pinguin-Animation */
+
+  #beak-lower { transform-origin: 100px 96px; }
+  .talking #beak-lower { animation: chatter .28s ease-in-out infinite alternate; }
+  @keyframes chatter { from { transform: rotate(0deg); } to { transform: rotate(11deg) translateY(1px); } }
+
+  #eyelids { transform: scaleY(0); transform-origin: center 92px; }
+  .penguin-alive #eyelids { animation: blink 6.5s infinite; }
+  @keyframes blink {
+    0%, 92%, 100% { transform: scaleY(0); }
+    95%, 97% { transform: scaleY(1); }
+  }
+
+  #wing-l { transform-origin: 46px 118px; }
+  #wing-r { transform-origin: 154px 118px; }
+  .penguin-alive #wing-l { animation: flap-l 3.6s ease-in-out infinite; }
+  .penguin-alive #wing-r { animation: flap-r 3.6s ease-in-out infinite; }
+  @keyframes flap-l { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-8deg); } }
+  @keyframes flap-r { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(8deg); } }
+
+  .talking #wing-l { animation-duration: 1.4s; }
+  .talking #wing-r { animation-duration: 1.4s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  @media print {
+    .player, #snow, .say-btn, .theme-toggle { display: none !important; }
+    body { background: #fff; color: #000; font-size: 10.5pt; }
+    .hero { background: none; padding-block: 0; }
+    .stop, .card { break-inside: avoid; box-shadow: none; border-color: #bbb; }
+    .band { padding-block: 1rem; }
+    a { color: #000; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <canvas id="snow" aria-hidden="true"></canvas>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <span class="label">Die Anleitung zum Ansehen und Anhören</span>
+      <h1>
+        <span class="thin">Ein Pinguin führt dich über das Eis –</span>
+        Windows 11, sicher und aufgeräumt.
+      </h1>
+      <p class="lede" data-say="Acht Schritte. Ohne künstliche Intelligenz, ohne Zusatzsoftware, ohne Ein-Klick-Wunder. Nur mit den Bordmitteln, die in Windows schon eingebaut sind. Ein Pinguin geht nie zwei Schritte auf einmal – und genau so funktioniert diese Anleitung auch.">
+        Acht Schritte. Ohne KI, ohne Zusatzsoftware, ohne Ein-Klick-Wunder – nur
+        mit den Bordmitteln, die in Windows schon eingebaut sind. Ein Pinguin geht
+        nie zwei Schritte auf einmal. Genau so funktioniert diese Anleitung.
+      </p>
+      <div style="display:flex; flex-wrap:wrap; gap:.7rem; align-items:center; margin-top:.4rem;">
+        <button id="hero-play" class="btn-primary btn-hero">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
+          Vorlesen starten
+        </button>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Zwischen hellem und dunklem Modus wechseln">
+          <span id="theme-icon" aria-hidden="true">◐</span> Ansicht
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-figure">
+      <div class="speech" id="speech-bubble" aria-hidden="true">Ich lese vor. Zurücklehnen genügt.</div>
+      <svg class="penguin penguin-alive" id="penguin" viewBox="0 0 200 250" role="img" aria-label="Ein gezeichneter Pinguin, der durch die Anleitung führt">
+        <ellipse cx="100" cy="238" rx="58" ry="7" fill="currentColor" opacity=".12"/>
+        <g id="feet" fill="var(--accent)">
+          <path d="M78 216c-14 3-24 9-25 16-1 5 3 7 9 7h22c5 0 7-3 7-7v-16z"/>
+          <path d="M122 216c14 3 24 9 25 16 1 5-3 7-9 7h-22c-5 0-7-3-7-7v-16z"/>
+        </g>
+        <path id="wing-l" d="M50 104c-14 10-22 34-19 62 1 12 5 22 12 24 6 2 9-3 7-11-6-25-4-49 6-66 3-6-1-12-6-9z" fill="var(--penguin-body)"/>
+        <path id="wing-r" d="M150 104c14 10 22 34 19 62-1 12-5 22-12 24-6 2-9-3-7-11 6-25 4-49-6-66-3-6 1-12 6-9z" fill="var(--penguin-body)"/>
+        <ellipse cx="100" cy="152" rx="62" ry="70" fill="var(--penguin-body)"/>
+        <ellipse cx="100" cy="82" rx="47" ry="45" fill="var(--penguin-body)"/>
+        <ellipse cx="100" cy="163" rx="42" ry="56" fill="var(--penguin-belly)"/>
+        <path d="M100 40c-24 0-42 17-45 40 6-13 20-20 45-20s39 7 45 20c-3-23-21-40-45-40z" fill="var(--penguin-body)"/>
+        <path d="M62 88c-6 2-8 10-5 17 3 7 9 10 13 7 4-3 3-10 0-16-2-6-4-9-8-8z" fill="var(--accent)" opacity=".85"/>
+        <path d="M138 88c6 2 8 10 5 17-3 7-9 10-13 7-4-3-3-10 0-16 2-6 4-9 8-8z" fill="var(--accent)" opacity=".85"/>
+        <ellipse cx="100" cy="79" rx="29" ry="26" fill="var(--penguin-belly)"/>
+        <g id="eyes">
+          <circle cx="88" cy="74" r="6" fill="#0B141A"/>
+          <circle cx="112" cy="74" r="6" fill="#0B141A"/>
+          <circle cx="90" cy="71.8" r="2.1" fill="#FFFFFF"/>
+          <circle cx="114" cy="71.8" r="2.1" fill="#FFFFFF"/>
+        </g>
+        <g id="eyelids" fill="var(--penguin-belly)">
+          <rect x="80" y="65" width="16" height="10" rx="4"/>
+          <rect x="104" y="65" width="16" height="10" rx="4"/>
+        </g>
+        <path d="M100 86c-7 0-12 4-12 7 0 3 5 5 12 5s12-2 12-5c0-3-5-7-12-7z" fill="var(--accent)"/>
+        <path id="beak-lower" d="M88 95c1 5 6 8 12 8s11-3 12-8c-4 2-7 3-12 3s-8-1-12-3z" fill="var(--accent-ink)"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<div class="player" id="player">
+  <div class="wrap player-inner">
+    <button id="play" class="btn-primary">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
+      <span id="play-label">Tour vorlesen</span>
+    </button>
+    <button id="stop" disabled>Stopp</button>
+    <div class="speed">
+      <label for="rate">Tempo</label>
+      <input type="range" id="rate" min="0.7" max="1.4" step="0.05" value="1">
+      <span id="rate-out" style="min-width:2.6rem">1,00×</span>
+    </div>
+    <div class="player-status" id="status"><span class="dot"></span><span id="status-text">Bereit</span></div>
+  </div>
+</div>
+
+<main>
+
+  <section class="band wrap" id="was">
+    <div class="band-head">
+      <span class="label">Worum es geht</span>
+      <h2>Kein Programm, das etwas macht. Ein Weg, den du gehst.</h2>
+      <p data-say="Hier wird nichts installiert und nichts läuft von allein durch. Das ist Absicht. Ein-Klick-Optimierer, Registry-Cleaner und Treiber-Booster richten regelmäßig mehr Schaden an, als sie nutzen. Der sichere Weg ist: erst sichern, dann eine Änderung nach der anderen, jede mit einem Rückweg. Das kann dir kein Programm seriös abnehmen.">
+        Hier wird nichts installiert, und es läuft nichts von allein durch. Das ist
+        Absicht: Ein-Klick-Optimierer, Registry-Cleaner und Treiber-Booster richten
+        regelmäßig mehr Schaden an, als sie nutzen. Der sichere Weg ist erst sichern,
+        dann eine Änderung nach der anderen – jede mit Rückweg.
+      </p>
+    </div>
+    <div class="cards cards-3">
+      <article class="card">
+        <span class="label">Du brauchst</span>
+        <h3>Nur Windows</h3>
+        <p>Alle Werkzeuge sind bereits eingebaut: Einstellungen, Task-Manager, Windows-Sicherheit, <code>robocopy</code>, <code>sfc</code>. Keine Zusatzsoftware, keine Konten, keine Lizenzen.</p>
+      </article>
+      <article class="card">
+        <span class="label">Du brauchst nicht</span>
+        <h3>Keine KI</h3>
+        <p>Kein Chatbot, keine Cloud, keine Datenübertragung. Diese Seite selbst lädt nichts nach und funktioniert vollständig ohne Internetverbindung.</p>
+      </article>
+      <article class="card">
+        <span class="label">Zeit</span>
+        <h3>60 Minuten bis 1 Wochenende</h3>
+        <p>Der Schnellstart bringt den Basisschutz an einem Nachmittag. Der vollständige Weg mit Aufräumen und Ordnungssystem ist ein Wochenendprojekt.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="band band-sunk" id="ablauf">
+    <div class="wrap">
+      <div class="band-head">
+        <span class="label">Die Spur · acht Stationen</span>
+        <h2>Der Ablaufplan</h2>
+        <p data-say="Die Reihenfolge ist kein Vorschlag, sondern Teil des Schutzes. Jeder Schritt setzt voraus, dass der vorherige fertig ist. Vor jeder Änderung gibt es eine Sicherung und einen Rückweg.">
+          Die Reihenfolge ist kein Vorschlag, sondern Teil des Schutzes: Jeder Schritt
+          setzt voraus, dass der vorherige fertig ist. Vor jeder Änderung existiert
+          eine Sicherung und ein Rückweg.
+        </p>
+      </div>
+
+      <div class="trail">
+
+        <article class="stop" id="s1">
+          <div class="stop-mark" aria-hidden="true">1</div>
+          <div class="stop-top"><span class="stop-num" aria-hidden="true">1</span><h3>Bestandsaufnahme</h3></div>
+          <p class="stop-body" data-say="Schritt 1: Bestandsaufnahme. Erst schauen, nichts ändern. Du notierst, was für ein Rechner das ist: Hersteller, Modell, Arbeitsspeicher, Windows-Version, installierte Programme und was beim Start automatisch mitläuft. Ohne dieses Bild weiß später niemand, was sich verbessert hat.">
+            Erst schauen, nichts ändern. Hersteller, Modell, Arbeitsspeicher,
+            Windows-Version, installierte Programme, Autostart – alles notieren.
+            Ohne dieses Bild weiß später niemand, was sich verbessert hat.
+          </p>
+          <div class="stop-foot">
+            <span class="chip">Keine Adminrechte</span>
+            <span class="chip chip-rule">Nichts wird verändert</span>
+            <a class="doc-link" href="01-bestandsaufnahme.md">Phase 1 öffnen</a>
+            <button class="say-btn" data-say-target="s1"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>Vorlesen</button>
+          </div>
+        </article>
+
+        <article class="stop" id="s2">
+          <div class="stop-mark" aria-hidden="true">2</div>
+          <div class="stop-top"><span class="stop-num" aria-hidden="true">2</span><h3>Backup und Rückweg schaffen</h3></div>
+          <p class="stop-body" data-say="Schritt 2: Backup und Rückweg schaffen. Wichtige Daten auf eine externe Festplatte sichern, einen Wiederherstellungspunkt anlegen und einen Notfall-USB-Stick erstellen. Diese Regel ist hart: Ohne diesen Schritt beginnt keine Reparatur.">
+            Wichtige Daten extern sichern, Wiederherstellungspunkt anlegen,
+            Wiederherstellungslaufwerk erstellen. Diese Regel ist hart:
+            <strong>Ohne diesen Schritt beginnt keine Reparatur.</strong>
+          </p>
+          <div class="stop-foot">
+            <span class="chip">3-2-1-Prinzip</span>
+            <span class="chip chip-rule">Pflicht vor allem Weiteren</span>
+            <a class="doc-link" href="02-backup-plan.md">Phase 2 öffnen</a>
+            <button class="say-btn" data-say-target="s2"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>Vorlesen</button>
+          </div>
+        </article>
+
+        <article class="stop" id="s3">
+          <div class="stop-mark" aria-hidden="true">3</div>
+          <div class="stop-top"><span class="stop-num" aria-hidden="true">3</span><h3>Windows aktualisieren und reparieren</h3></div>
+          <p class="stop-body" data-say="Schritt 3: Windows aktualisieren und reparieren. Alle Sicherheitsupdates installieren, so lange wiederholen, bis Windows meldet, dass alles aktuell ist. Danach die Systemdateien mit den eingebauten Werkzeugen S F C und DISM prüfen, dazu Datenträger und Ereignisprotokoll.">
+            Alle Sicherheitsupdates installieren – so lange wiederholen, bis Windows
+            „Sie sind auf dem neuesten Stand“ meldet. Danach Systemdateien mit
+            <code>sfc</code> und <code>DISM</code> prüfen, dazu Datenträger und
+            Ereignisprotokoll.
+          </p>
+          <div class="stop-foot">
+            <span class="chip">Adminrechte nötig</span>
+            <span class="chip">Mehrere Neustarts</span>
+            <a class="doc-link" href="03-windows-pruefen-reparieren.md">Phase 3 öffnen</a>
+            <button class="say-btn" data-say-target="s3"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>Vorlesen</button>
+          </div>
+        </article>
+
+        <article class="stop" id="s4">
+          <div class="stop-mark" aria-hidden="true">4</div>
+          <div class="stop-top"><span class="stop-num" aria-hidden="true">4</span><h3>Sicherheit prüfen und härten</h3></div>
+          <p class="stop-body" data-say="Schritt 4: Sicherheit prüfen und härten. Das ist das Herzstück. Virenschutz, Firewall, SmartScreen, Gerätesicherheit mit Secure Boot und T P M, Laufwerksverschlüsselung und die Benutzerkonten. Die wichtigste Regel dabei: Nichts davon abschalten. Fehlenden Schutz einschalten.">
+            Das Herzstück: Virenschutz, Firewall, SmartScreen, Gerätesicherheit
+            (Secure Boot, TPM), Laufwerksverschlüsselung, Benutzerkonten. Die
+            wichtigste Regel: <strong>nichts abschalten – fehlenden Schutz aktivieren.</strong>
+          </p>
+          <div class="stop-foot">
+            <span class="chip">Prüfbericht verfügbar</span>
+            <span class="chip chip-rule">Nichts abschalten</span>
+            <a class="doc-link" href="03-windows-pruefen-reparieren.md">Phase 3.2 öffnen</a>
+            <button class="say-btn" data-say-target="s4"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>Vorlesen</button>
+          </div>
+        </article>
+
+        <article class="stop" id="s5">
+          <div class="stop-mark" aria-hidden="true">5</div>
+          <div class="stop-top"><span class="stop-num" aria-hidden="true">5</span><h3>Treiber gezielt aktualisieren</h3></div>
+          <p class="stop-body" data-say="Schritt 5: Treiber gezielt aktualisieren. Nur über Windows Update und die offizielle Seite des Herstellers. Einen Treiber nach dem anderen, dazwischen immer Neustart und kurzer Test. Und ganz wichtig: keine Treiber-Booster. Diese Programme installieren häufig falsche Treiber und sind ein Sicherheitsrisiko.">
+            Nur über Windows Update und die offizielle Hersteller-Seite. Einen nach
+            dem anderen, dazwischen Neustart und Test. Läuft ein Gerät einwandfrei,
+            bleibt es, wie es ist. <strong>Keine Driver-Booster.</strong>
+          </p>
+          <div class="stop-foot">
+            <span class="chip">Nur offizielle Quellen</span>
+            <span class="chip chip-rule">Einzeln, mit Rückweg</span>
+            <a class="doc-link" href="04-treiber-aktualisieren.md">Phase 4 öffnen</a>
+            <button class="say-btn" data-say-target="s5"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>Vorlesen</button>
+          </div>
+        </article>
+
+        <article class="stop" id="s6">
+          <div class="stop-mark" aria-hidden="true">6</div>
+          <div class="stop-top"><span class="stop-num" aria-hidden="true">6</span><h3>Aufräumen und optimieren</h3></div>
+          <p class="stop-body" data-say="Schritt 6: Aufräumen und optimieren. Erst eine Liste machen, dann gemeinsam durchgehen, dann einzeln umsetzen. Nicht genutzte Programme deinstallieren, den Autostart entschlacken und Speicherplatz freigeben. Autostart-Einträge werden deaktiviert, nicht gelöscht. Keine Registry-Cleaner, keine Tuning-Suiten.">
+            Erst Liste, dann Freigabe, dann einzeln umsetzen: ungenutzte Programme
+            entfernen, Autostart entschlacken (deaktivieren, nicht löschen),
+            Speicherplatz freigeben. <strong>Keine Registry-Cleaner, keine Tuning-Suiten.</strong>
+          </p>
+          <div class="stop-foot">
+            <span class="chip">Nur nach Freigabe</span>
+            <span class="chip">Bordmittel genügen</span>
+            <a class="doc-link" href="05-aufraeumen-optimieren.md">Phase 5 öffnen</a>
+            <button class="say-btn" data-say-target="s6"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>Vorlesen</button>
+          </div>
+        </article>
+
+        <article class="stop" id="s7">
+          <div class="stop-mark" aria-hidden="true">7</div>
+          <div class="stop-top"><span class="stop-num" aria-hidden="true">7</span><h3>Dateien ordnen</h3></div>
+          <p class="stop-body" data-say="Schritt 7: Dateien ordnen. Privat und Dienstlich trennen, Fotos sortieren, Doppelte finden. Die Regel lautet: verschieben statt löschen. Die Originale bleiben erhalten, bis das neue System geprüft ist. Gelöscht wird erst ganz am Ende und nur mit aktuellem Backup.">
+            Privat und Dienstlich trennen, Fotos sortieren, Duplikate finden. Die
+            Regel: <strong>verschieben statt löschen.</strong> Originale bleiben, bis
+            die neue Struktur geprüft ist – gelöscht wird zuletzt, mit frischem Backup.
+          </p>
+          <div class="stop-foot">
+            <span class="chip">Explorer und robocopy</span>
+            <span class="chip chip-rule">Erst fragen, dann verschieben</span>
+            <a class="doc-link" href="06-ordnungssystem-dateien.md">Phase 6 öffnen</a>
+            <button class="say-btn" data-say-target="s7"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>Vorlesen</button>
+          </div>
+        </article>
+
+        <article class="stop" id="s8">
+          <div class="stop-mark" aria-hidden="true">8</div>
+          <div class="stop-top"><span class="stop-num" aria-hidden="true">8</span><h3>Nachmessen und Wartungsroutine</h3></div>
+          <p class="stop-body" data-say="Schritt 8: Nachmessen und die Wartungsroutine festlegen. Vergleiche den Zustand mit der Bestandsaufnahme vom Anfang. Danach gilt eine feste Routine: monatlich dreißig Minuten, vierteljährlich sechzig Minuten. Ein gepflegter Rechner braucht dreißig Minuten im Monat. Ein vernachlässigter braucht irgendwann ein ganzes Wochenende.">
+            Zustand mit der Bestandsaufnahme vergleichen, dann feste Routine:
+            monatlich 30 Minuten, vierteljährlich 60. Ein gepflegter PC braucht
+            30 Minuten im Monat – ein vernachlässigter irgendwann ein Wochenende.
+          </p>
+          <div class="stop-foot">
+            <span class="chip">Monatlich 30 Min</span>
+            <span class="chip">Vierteljährlich 60 Min</span>
+            <a class="doc-link" href="07-wartungsroutine.md">Phase 7 öffnen</a>
+            <button class="say-btn" data-say-target="s8"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>Vorlesen</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="band wrap" id="start">
+    <div class="band-head">
+      <span class="label">So fängst du an</span>
+      <h2>Herunterladen, entpacken, lesen</h2>
+      <p data-say="So fängst du an. Auf der Projektseite den grünen Knopf Code anklicken und Download ZIP wählen. Die Datei mit Rechtsklick entpacken, zum Beispiel in den Ordner Dokumente. Fertig. Es gibt keine Installation und keine Adminrechte dafür. Danach öffnest du entweder den Schnellstart für den Basisschutz an einem Nachmittag oder den vollständigen Ablaufplan.">
+        Auf der Projektseite <strong>Code → Download ZIP</strong>, dann per Rechtsklick
+        entpacken – zum Beispiel nach „Dokumente“. Keine Installation, keine
+        Adminrechte. Danach liest du los.
+      </p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="label">Wenig Zeit</span>
+        <h3>Schnellstart · 60 Minuten</h3>
+        <p>Sechs Schritte für den Basisschutz: Daten sichern, Wiederherstellungspunkt, Windows Update, Schutzstatus, Browser und Konten, Autostart.</p>
+        <p><a href="SCHNELLSTART.md">SCHNELLSTART.md öffnen</a> · <a href="QUICKSTART.md">English version</a></p>
+      </article>
+      <article class="card">
+        <span class="label">Gründlich</span>
+        <h3>Der volle Weg · 8 Schritte</h3>
+        <p>Die Stationen von oben, jede mit ausführlicher Anleitung. Zum Abhaken auf Papier gibt es die Fortschritts-Checkliste.</p>
+        <p><a href="README.md">README.md öffnen</a> · <a href="vorlagen/fortschritts-checkliste.md">Checkliste</a></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="band band-sunk" id="berichte">
+    <div class="wrap">
+      <div class="band-head">
+        <span class="label">Die einzigen zwei „Programme“</span>
+        <h2>Zwei Berichte, die nur schauen</h2>
+        <p data-say="Es gibt zwei Skripte im Paket. Beide lesen nur und verändern nichts an deinem Rechner. Sie stellen keine Verbindung ins Internet her und geben keine Benutzernamen, Computernamen, Seriennummern oder Dateipfade aus. Du startest sie über das Windows-Terminal.">
+          Beide lesen nur und verändern nichts. Sie stellen keine Verbindung ins
+          Internet her und geben weder Benutzer- noch Computernamen, Seriennummern
+          oder Dateipfade aus. Start über das Windows-Terminal.
+        </p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <span class="label">Schritt 4 · Sicherheit</span>
+          <h3>Sicherheitsbericht</h3>
+          <p>Prüft Defender, Firewall, SmartScreen, Benutzerkontensteuerung, Secure Boot, TPM, BitLocker und den Update-Stand. Pro Bereich: <strong>OK</strong>, <strong>Warnung</strong> oder <strong>Unbekannt</strong> – plus ein Satz, was zu tun ist.</p>
+          <pre class="code-block"><code>powershell -NoProfile -ExecutionPolicy Bypass -File .\skills\windows-pc-guru\scripts\Get-SecurityBaselineReport.ps1</code></pre>
+          <p>Mit <code>-HtmlPath</code> entsteht daraus ein druckbarer Bericht zum Abheften.</p>
+        </article>
+        <article class="card">
+          <span class="label">Schritt 8 · Wartung</span>
+          <h3>Wartungs-Check</h3>
+          <p>Beantwortet in einer Minute: Ist dieser PC noch gepflegt? Letzter Neustart, Update-Alter, Alter der Virensignaturen, freier Speicherplatz, Anzahl der Autostart-Einträge – jeweils mit fester Bewertungsgrenze.</p>
+          <pre class="code-block"><code>powershell -NoProfile -ExecutionPolicy Bypass -File .\skills\windows-pc-guru\scripts\Get-MaintenanceStatus.ps1</code></pre>
+          <p>Die Warnungen arbeitest du danach von Hand über die Anleitungen ab.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band wrap" id="niemals">
+    <div class="band-head">
+      <span class="label">Grenzen</span>
+      <h2>Was hier bewusst nicht passiert</h2>
+    </div>
+    <div class="cards">
+      <div>
+        <ul class="plain no-list" data-say="Was hier bewusst nicht passiert: Keine Registry-Cleaner, keine RAM-Booster, keine Debloat-Skripte. Der Virenschutz, die Firewall, SmartScreen, Secure Boot und BitLocker werden niemals abgeschaltet. Es wird nichts gelöscht oder installiert ohne deine Zustimmung und ohne Rückweg. Und es werden keine Verbesserungen behauptet, die nicht nachgemessen wurden.">
+          <li><span class="tick"></span><span>Keine Registry-Cleaner, RAM-Booster oder Debloat-Skripte.</span></li>
+          <li><span class="tick"></span><span>Kein Abschalten von Virenschutz, Firewall, SmartScreen, Secure Boot oder BitLocker.</span></li>
+          <li><span class="tick"></span><span>Kein Löschen und kein Installieren ohne deine Zustimmung und ohne Rückweg.</span></li>
+          <li><span class="tick"></span><span>Keine behaupteten Verbesserungen ohne Nachmessung.</span></li>
+        </ul>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:1rem;">
+        <p class="note" data-say="Ein Hinweis zum Vorlesen: Das Sprechen erledigt der Browser auf deinem Gerät. Diese Seite sendet dabei nichts ins Internet. Beachte allerdings: Einzelne Stimmen in Microsoft Edge, die als natürlich oder online bezeichnet werden, berechnen die Sprache auf Servern von Microsoft. Diese Seite bevorzugt deshalb von sich aus eine lokal installierte deutsche Stimme.">
+          <strong>Zum Vorlesen:</strong> Das Sprechen erledigt der Browser auf deinem
+          Gerät – diese Seite sendet dabei nichts. Einzelne Edge-Stimmen mit dem Zusatz
+          „natürlich“ oder „online“ rechnen jedoch auf Microsoft-Servern. Deshalb wird
+          hier automatisch eine <strong>lokal installierte</strong> deutsche Stimme bevorzugt.
+        </p>
+        <p class="note" style="border-color: var(--cold)">
+          <strong>Firmenrechner?</strong> Dann gilt zuerst der Firmenmodus Lokal –
+          keine Cloud, keine Uploads, keine Fernwartung.
+          <a href="skills/windows-pc-guru/references/corporate-local-only.md">Regeln lesen</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <strong style="color: var(--ink-soft)">Windows-PC-Guru</strong><br>
+      Diese Seite ist eine einzelne Datei. Sie lädt nichts nach und funktioniert offline.
+    </div>
+    <div>
+      <a href="README.md">README</a> · <a href="ROADMAP.md">Roadmap</a> ·
+      <a href="07-wartungsroutine.md">Wartungsroutine</a> · <a href="LICENSE.txt">Apache 2.0</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Ansicht: hell / dunkel ---------- */
+  var root = document.documentElement;
+  var themeBtn = document.getElementById("theme-toggle");
+  var themeIcon = document.getElementById("theme-icon");
+
+  themeBtn.addEventListener("click", function () {
+    var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var current = root.getAttribute("data-theme") || (prefersDark ? "dark" : "light");
+    var next = current === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    themeIcon.textContent = next === "dark" ? "☾" : "☀";
+  });
+
+  /* ---------- Vorlesen ---------- */
+
+  var synth = window.speechSynthesis;
+  var playBtn = document.getElementById("play");
+  var playLabel = document.getElementById("play-label");
+  var heroBtn = document.getElementById("hero-play");
+  var stopBtn = document.getElementById("stop");
+  var statusBox = document.getElementById("status");
+  var statusText = document.getElementById("status-text");
+  var rateInput = document.getElementById("rate");
+  var rateOut = document.getElementById("rate-out");
+  var penguin = document.getElementById("penguin");
+  var heroFigure = document.querySelector(".hero-figure");
+
+  if (!synth || typeof window.SpeechSynthesisUtterance !== "function") {
+    statusText.textContent = "Vorlesen wird von diesem Browser nicht unterstützt";
+    [playBtn, heroBtn, stopBtn, rateInput].forEach(function (el) { el.disabled = true; });
+    document.querySelectorAll(".say-btn").forEach(function (b) { b.remove(); });
+    return;
+  }
+
+  /* Alle vorlesbaren Stellen in Dokumentreihenfolge */
+  var passages = Array.prototype.slice.call(document.querySelectorAll("[data-say]"));
+
+  var voice = null;
+  var queue = [];        /* Sätze der laufenden Wiedergabe */
+  var queueIndex = 0;
+  var activeEl = null;
+  var tourFrom = -1;     /* Index in passages, ab dem die Tour läuft; -1 = Einzelabschnitt */
+  var keepAlive = null;
+
+  function pickVoice() {
+    var all = synth.getVoices() || [];
+    if (!all.length) return;
+    var german = all.filter(function (v) { return /^de(-|_|$)/i.test(v.lang); });
+    /* Lokal installierte Stimmen zuerst: sie rechnen auf dem Gerät, nicht in der Cloud. */
+    voice = german.filter(function (v) { return v.localService; })[0] ||
+            german[0] ||
+            all.filter(function (v) { return v.default; })[0] ||
+            all[0];
+  }
+  pickVoice();
+  synth.addEventListener("voiceschanged", pickVoice);
+
+  function splitSentences(text) {
+    var cleaned = text.replace(/\s+/g, " ").trim();
+    var parts = cleaned.match(/[^.!?:]+[.!?:]+["“”)]?|\S[^.!?:]*$/g) || [cleaned];
+    /* Sehr kurze Fragmente an den Vorgänger hängen – klingt natürlicher. */
+    var out = [];
+    parts.forEach(function (p) {
+      var s = p.trim();
+      if (!s) return;
+      if (out.length && s.length < 14) out[out.length - 1] += " " + s;
+      else out.push(s);
+    });
+    return out;
+  }
+
+  function setActive(el) {
+    if (activeEl) {
+      activeEl.classList.remove("speaking");
+      var prevStop = activeEl.closest(".stop");
+      if (prevStop) prevStop.classList.remove("speaking");
+    }
+    activeEl = el;
+    if (!el) return;
+    var stop = el.closest(".stop");
+    (stop || el).classList.add("speaking");
+    var target = stop || el.closest("section") || el;
+    var rect = target.getBoundingClientRect();
+    if (rect.top < 90 || rect.bottom > window.innerHeight - 40) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  function setPlayingUi(on) {
+    statusBox.classList.toggle("is-playing", on);
+    penguin.classList.toggle("talking", on);
+    heroFigure.classList.toggle("speaking-now", on);
+    stopBtn.disabled = !on;
+    if (on) {
+      playLabel.textContent = "Pause";
+      playBtn.querySelector("svg").innerHTML = '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>';
+    } else {
+      playLabel.textContent = tourFrom >= 0 && synth.paused ? "Weiter" : "Tour vorlesen";
+      playBtn.querySelector("svg").innerHTML = '<path d="M8 5.14v13.72L19 12 8 5.14z"/>';
+    }
+  }
+
+  function reportProgress() {
+    if (tourFrom >= 0 && activeEl) {
+      var n = passages.indexOf(activeEl) + 1;
+      statusText.textContent = "Abschnitt " + n + " von " + passages.length +
+        (voice ? " · " + voice.name : "");
+    } else if (activeEl) {
+      statusText.textContent = "Liest einen Abschnitt vor" + (voice ? " · " + voice.name : "");
+    }
+  }
+
+  function speakNext() {
+    if (queueIndex >= queue.length) { finish(); return; }
+    var item = queue[queueIndex];
+    if (item.el !== activeEl) { setActive(item.el); reportProgress(); }
+
+    var u = new SpeechSynthesisUtterance(item.text);
+    u.lang = (voice && voice.lang) || "de-DE";
+    if (voice) u.voice = voice;
+    u.rate = parseFloat(rateInput.value);
+    u.pitch = 1;
+    u.onend = function () { queueIndex++; speakNext(); };
+    u.onerror = function (e) {
+      if (e && e.error === "interrupted") return;   /* durch Stopp ausgelöst */
+      queueIndex++; speakNext();
+    };
+    synth.speak(u);
+  }
+
+  /* Chrome hält lange Wiedergaben nach ~15 s an – regelmäßig anstoßen. */
+  function startKeepAlive() {
+    stopKeepAlive();
+    keepAlive = window.setInterval(function () {
+      if (synth.speaking && !synth.paused) { synth.pause(); synth.resume(); }
+    }, 9000);
+  }
+  function stopKeepAlive() {
+    if (keepAlive) { window.clearInterval(keepAlive); keepAlive = null; }
+  }
+
+  function buildQueue(elements) {
+    queue = [];
+    elements.forEach(function (el) {
+      splitSentences(el.getAttribute("data-say")).forEach(function (sentence) {
+        queue.push({ el: el, text: sentence });
+      });
+    });
+    queueIndex = 0;
+  }
+
+  function play(elements, isTour) {
+    synth.cancel();
+    tourFrom = isTour ? passages.indexOf(elements[0]) : -1;
+    buildQueue(elements);
+    setPlayingUi(true);
+    startKeepAlive();
+    speakNext();
+  }
+
+  function finish() {
+    stopKeepAlive();
+    setActive(null);
+    tourFrom = -1;
+    setPlayingUi(false);
+    statusText.textContent = "Fertig";
+  }
+
+  function hardStop() {
+    stopKeepAlive();
+    synth.cancel();
+    queue = [];
+    queueIndex = 0;
+    setActive(null);
+    tourFrom = -1;
+    setPlayingUi(false);
+    statusText.textContent = "Angehalten";
+  }
+
+  function togglePlay() {
+    if (synth.speaking && !synth.paused) {
+      synth.pause();
+      setPlayingUi(false);
+      statusText.textContent = "Pause";
+      playLabel.textContent = "Weiter";
+      stopBtn.disabled = false;
+      return;
+    }
+    if (synth.paused) {
+      synth.resume();
+      setPlayingUi(true);
+      reportProgress();
+      return;
+    }
+    play(passages, true);
+  }
+
+  playBtn.addEventListener("click", togglePlay);
+  heroBtn.addEventListener("click", function () {
+    if (synth.speaking || synth.paused) { hardStop(); }
+    play(passages, true);
+  });
+  stopBtn.addEventListener("click", hardStop);
+
+  document.querySelectorAll(".say-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var host = document.getElementById(btn.getAttribute("data-say-target"));
+      var el = host.querySelector("[data-say]");
+      if (!el) return;
+      play([el], false);
+    });
+  });
+
+  rateInput.addEventListener("input", function () {
+    rateOut.textContent = parseFloat(rateInput.value).toFixed(2).replace(".", ",") + "×";
+  });
+  rateInput.addEventListener("change", function () {
+    /* Tempo greift erst beim nächsten Satz – laufenden Satz sauber neu anstoßen. */
+    if (synth.speaking || synth.paused) {
+      var rest = queue.slice(queueIndex);
+      synth.cancel();
+      queue = rest;
+      queueIndex = 0;
+      setPlayingUi(true);
+      speakNext();
+    }
+  });
+
+  window.addEventListener("beforeunload", function () { synth.cancel(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && (synth.speaking || synth.paused)) hardStop();
+  });
+
+  statusText.textContent = "Bereit";
+
+  /* ---------- Schneefall ---------- */
+
+  var canvas = document.getElementById("snow");
+  if (canvas && canvas.getContext && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    var ctx = canvas.getContext("2d");
+    var flakes = [];
+    var w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      w = r.width; h = r.height;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var count = Math.round(Math.min(60, w / 18));
+      flakes = [];
+      for (var i = 0; i < count; i++) {
+        flakes.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: 0.8 + Math.random() * 1.9,
+          vy: 0.15 + Math.random() * 0.45,
+          drift: 0.25 + Math.random() * 0.5,
+          phase: Math.random() * Math.PI * 2,
+          a: 0.25 + Math.random() * 0.45
+        });
+      }
+    }
+
+    function frame(t) {
+      ctx.clearRect(0, 0, w, h);
+      var isDark = root.getAttribute("data-theme") === "dark" ||
+        (!root.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      ctx.fillStyle = isDark ? "#DCEAF0" : "#FFFFFF";
+      for (var i = 0; i < flakes.length; i++) {
+        var f = flakes[i];
+        f.y += f.vy;
+        f.x += Math.sin(t / 2600 + f.phase) * f.drift * 0.35;
+        if (f.y - f.r > h) { f.y = -f.r; f.x = Math.random() * w; }
+        ctx.globalAlpha = f.a * (isDark ? 0.5 : 0.9);
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      window.requestAnimationFrame(frame);
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+    window.requestAnimationFrame(frame);
+  }
+})();
+</script>
+
+</body>
+</html>

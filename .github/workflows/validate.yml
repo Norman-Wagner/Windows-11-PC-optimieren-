@@ -17,3 +17,17 @@ jobs:
       - name: Validate repository
         shell: pwsh
         run: ./scripts/Test-Repository.ps1 -RunDiagnosticsSmokeTest
+
+  tests:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          if (-not (Get-Module -ListAvailable Pester | Where-Object { $_.Version.Major -ge 5 })) {
+            Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
+          }
+          Invoke-Pester -Path ./tests -Output Detailed -CI
