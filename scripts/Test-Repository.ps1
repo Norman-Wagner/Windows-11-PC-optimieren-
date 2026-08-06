@@ -65,6 +65,7 @@ $requiredPaths = @(
     'AUFGABEN.md',
     'SCHNELLSTART.md',
     'QUICKSTART.md',
+    'pinguin-anleitung.html',
     '07-wartungsroutine.md',
     'vorlagen\fortschritts-checkliste.md',
     'vorlagen\vorher-nachher-vergleich.md'

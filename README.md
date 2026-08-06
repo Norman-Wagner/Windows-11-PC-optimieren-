@@ -15,6 +15,12 @@ jeder Änderung existiert ein Backup und ein Rückweg. Wenig Zeit? Der
 [Fortschritts-Checkliste](vorlagen/fortschritts-checkliste.md); Verbesserungen
 belegen: [Vorher/Nachher-Vergleich](vorlagen/vorher-nachher-vergleich.md).
 
+Lieber anschauen und anhören statt lesen? Die bebilderte Fassung
+[pinguin-anleitung.html](pinguin-anleitung.html) führt durch dieselben acht
+Schritte und **liest sie auf Wunsch vor**. Einfach im Browser öffnen: eine
+einzelne Datei, die nichts nachlädt und offline funktioniert. Das Sprechen
+übernimmt die in Windows eingebaute Sprachausgabe auf dem eigenen Gerät.
+
 1. **Bestandsaufnahme** – erst lesen, nichts ändern: Hardware, Windows-Stand,
    Programme und Autostart erfassen und in die
    [Checkliste](vorlagen/bestandsaufnahme-checkliste.md) eintragen.

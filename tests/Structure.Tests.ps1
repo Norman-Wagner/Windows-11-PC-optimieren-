@@ -15,6 +15,7 @@ Describe 'Pflichtdateien' {
         'AUFGABEN.md'
         'SCHNELLSTART.md'
         'QUICKSTART.md'
+        'pinguin-anleitung.html'
         '07-wartungsroutine.md'
         'vorlagen/fortschritts-checkliste.md'
         'vorlagen/vorher-nachher-vergleich.md'
@@ -134,6 +135,46 @@ Describe 'Neue Dokumente' {
         $stepsEn | Should -Be $stepsDe
         $quickstartEn | Should -Match 'SCHNELLSTART\.md'
         $quickstartDe | Should -Match 'QUICKSTART\.md'
+    }
+
+    It 'die vorlesbare Anleitung lädt nichts nach und greift nicht auf das Netz zu' {
+        $page = Get-Content -Raw -Encoding UTF8 -LiteralPath (
+            Join-Path $script:repositoryRoot 'pinguin-anleitung.html'
+        )
+
+        $page | Should -Match '<!DOCTYPE html>'
+        $page | Should -Not -Match 'https?://'
+        foreach ($networkApi in @('fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon', 'EventSource', 'importScripts')) {
+            $page | Should -Not -Match ([regex]::Escape($networkApi))
+        }
+        $page | Should -Not -Match '@import'
+    }
+
+    It 'die vorlesbare Anleitung verlinkt nur vorhandene Dateien' {
+        $page = Get-Content -Raw -Encoding UTF8 -LiteralPath (
+            Join-Path $script:repositoryRoot 'pinguin-anleitung.html'
+        )
+
+        $targets = [regex]::Matches($page, 'href="([^"#][^"]*)"') |
+            ForEach-Object { $_.Groups[1].Value } |
+            Sort-Object -Unique
+
+        @($targets).Count | Should -BeGreaterOrEqual 8
+        foreach ($target in $targets) {
+            Join-Path $script:repositoryRoot $target | Should -Exist
+        }
+    }
+
+    It 'die vorlesbare Anleitung deckt alle acht Schritte ab und kann sie vorlesen' {
+        $page = Get-Content -Raw -Encoding UTF8 -LiteralPath (
+            Join-Path $script:repositoryRoot 'pinguin-anleitung.html'
+        )
+
+        foreach ($step in 1..8) {
+            $page | Should -Match "id=`"s$step`""
+            $page | Should -Match "data-say-target=`"s$step`""
+        }
+        ([regex]::Matches($page, 'data-say=')).Count | Should -BeGreaterOrEqual 12
     }
 
     It 'die Vergleichsvorlage verspricht keine Pauschal-Referenzwerte' {
