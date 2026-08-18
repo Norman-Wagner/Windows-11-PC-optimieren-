@@ -28,7 +28,7 @@ jobs:
       - name: Static analysis
         shell: pwsh
         run: |
-          $paths = @('./engine', './skills/windows-pc-guru/scripts', './scripts')
+          $paths = @('./skills/windows-pc-guru/engine', './skills/windows-pc-guru/scripts', './scripts')
           $results = foreach ($path in $paths) {
             Invoke-ScriptAnalyzer -Path $path -Recurse -Severity Warning,Error
           }
