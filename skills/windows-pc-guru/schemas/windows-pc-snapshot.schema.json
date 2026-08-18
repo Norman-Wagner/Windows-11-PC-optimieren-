@@ -37,9 +37,9 @@
     "Power": { "type": "object" },
     "Updates": { "type": "object" },
     "Reliability": { "type": "object" },
-    "ProblemDevices": { "type": "array" },
-    "NetworkAdapters": { "type": "array" },
-    "RecentSystemEvents": { "type": "array" }
+    "ProblemDevices": { "type": ["array", "object"] },
+    "NetworkAdapters": { "type": ["array", "object"] },
+    "RecentSystemEvents": { "type": ["array", "object"] }
   },
   "additionalProperties": true
 }
