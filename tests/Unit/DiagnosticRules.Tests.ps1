@@ -2,7 +2,7 @@
 
 BeforeAll {
     $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-    $rulesScript = Join-Path $repositoryRoot 'engine\Diagnostics\Invoke-DiagnosticRules.ps1'
+    $rulesScript = Join-Path $repositoryRoot 'skills\windows-pc-guru\engine\Diagnostics\Invoke-DiagnosticRules.ps1'
 
     function New-TestSnapshot {
         param([switch]$Healthy)
