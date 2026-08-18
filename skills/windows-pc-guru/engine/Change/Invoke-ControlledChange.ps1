@@ -2,17 +2,19 @@
 
 <#
 .SYNOPSIS
-Erzeugt einen kontrollierten Änderungsplan und erzwingt explizite Freigabe.
+Erzeugt einen kontrollierten Änderungsplan und erzwingt Kompatibilitätsprüfung und explizite Freigabe.
 
 .DESCRIPTION
 Produktive Remediations aus dem Katalog sind derzeit ManualGuided und werden
-nicht automatisch ausgeführt. Der interne TestHarness beweist den Lifecycle
+nicht automatisch ausgeführt. Vor jedem produktiven Preview wird der lokale
+Kompatibilitätskontext geprüft. Der interne TestHarness beweist den Lifecycle
 Backup -> Apply -> Verify -> Rollback ausschließlich im Arbeitsspeicher.
 #>
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
     [string]$RecipeId,
+    [psobject]$CompatibilityContext,
     [switch]$Approve,
     [switch]$TestHarness,
     [switch]$SimulateVerifyFailure,
@@ -22,7 +24,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-function New-Result {
+function New-ResultObject {
     param(
         [string]$Status,
         [bool]$Approved,
@@ -32,11 +34,12 @@ function New-Result {
         [bool]$RolledBack,
         [AllowNull()][object]$Plan,
         [AllowNull()][object]$Backup,
-        [AllowNull()][object]$FinalState
+        [AllowNull()][object]$FinalState,
+        [AllowNull()][object]$Compatibility
     )
 
     [pscustomobject][ordered]@{
-        SchemaVersion = '1.0'
+        SchemaVersion = '2.0'
         NetworkUsed = $false
         FilesChanged = $false
         RecipeId = $RecipeId
@@ -46,6 +49,7 @@ function New-Result {
         Applied = $Applied
         Verified = $Verified
         RolledBack = $RolledBack
+        Compatibility = $Compatibility
         Plan = $Plan
         Backup = $Backup
         FinalState = $FinalState
@@ -67,7 +71,7 @@ if ($TestHarness) {
     }
 
     if (-not $Approve) {
-        $result = New-Result -Status 'PreviewOnly' -Approved $false -BackupCreated $false -Applied $false -Verified $false -RolledBack $false -Plan $plan -Backup $null -FinalState 'Before'
+        $result = New-ResultObject -Status 'PreviewOnly' -Approved $false -BackupCreated $false -Applied $false -Verified $false -RolledBack $false -Plan $plan -Backup $null -FinalState 'Before' -Compatibility $null
     }
     else {
         $currentState = 'Before'
@@ -82,44 +86,64 @@ if ($TestHarness) {
         }
 
         $status = if ($verified) { 'AppliedAndVerified' } else { 'VerificationFailedRolledBack' }
-        $result = New-Result -Status $status -Approved $true -BackupCreated $true -Applied $true -Verified $verified -RolledBack $rolledBack -Plan $plan -Backup $backup -FinalState $currentState
+        $result = New-ResultObject -Status $status -Approved $true -BackupCreated $true -Applied $true -Verified $verified -RolledBack $rolledBack -Plan $plan -Backup $backup -FinalState $currentState -Compatibility $null
     }
 }
 else {
-    $catalogPath = Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) 'remediations\catalog.json'
+    $skillRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+    $catalogPath = Join-Path $skillRoot 'remediations\catalog.json'
+    $contextScript = Join-Path $skillRoot 'engine\Compatibility\Get-RemediationCompatibilityContext.ps1'
+    $compatibilityScript = Join-Path $skillRoot 'engine\Compatibility\Test-RemediationCompatibility.ps1'
+
     if (-not (Test-Path -LiteralPath $catalogPath -PathType Leaf)) {
         throw "Remediation-Katalog nicht gefunden: $catalogPath"
     }
 
     $catalog = Get-Content -Raw -Encoding UTF8 -LiteralPath $catalogPath | ConvertFrom-Json
+    if ($catalog.SchemaVersion -ne '2.0') {
+        throw 'Unerwartete Remediation-Katalogversion.'
+    }
+
     $recipe = @($catalog.Remediations | Where-Object Id -eq $RecipeId | Select-Object -First 1)
     if ($recipe.Count -ne 1) {
         throw "Unbekannte Remediation-ID: $RecipeId"
     }
 
     $item = $recipe[0]
-    $plan = [pscustomobject][ordered]@{
-        Id = $item.Id
-        Title = $item.Title
-        Risk = $item.Risk
-        Reversibility = $item.Reversibility
-        RequiresAdmin = $item.RequiresAdmin
-        RestartRequired = $item.RestartRequired
-        ExecutionMode = $item.ExecutionMode
-        ExpectedBenefit = $item.ExpectedBenefit
-        Validation = $item.Validation
-        RequiresApproval = $true
+    if ($null -eq $CompatibilityContext) {
+        $CompatibilityContext = & $contextScript
     }
+    $compatibility = & $compatibilityScript -Recipe $item -Context $CompatibilityContext
 
-    if (-not $Approve) {
-        $result = New-Result -Status 'PreviewOnly' -Approved $false -BackupCreated $false -Applied $false -Verified $false -RolledBack $false -Plan $plan -Backup $null -FinalState $null
-    }
-    elseif ($item.ExecutionMode -eq 'ManualGuided') {
-        $result = New-Result -Status 'ManualExecutionRequired' -Approved $true -BackupCreated $false -Applied $false -Verified $false -RolledBack $false -Plan $plan -Backup $null -FinalState $null
+    if (-not $compatibility.Allowed) {
+        $status = if ($compatibility.Status -eq 'Blocked') { 'CompatibilityBlocked' } else { 'CompatibilityReviewRequired' }
+        $result = New-ResultObject -Status $status -Approved $false -BackupCreated $false -Applied $false -Verified $false -RolledBack $false -Plan $null -Backup $null -FinalState $null -Compatibility $compatibility
     }
     else {
-        throw "Nicht unterstützter ExecutionMode: $($item.ExecutionMode)"
+        $plan = [pscustomobject][ordered]@{
+            Id = $item.Id
+            Title = $item.Title
+            Risk = $item.Risk
+            Reversibility = $item.Reversibility
+            RequiresAdmin = $item.RequiresAdmin
+            RestartRequired = $item.RestartRequired
+            ExecutionMode = $item.ExecutionMode
+            ExpectedBenefit = $item.ExpectedBenefit
+            Validation = $item.Validation
+            RequiresApproval = $true
+            CompatibilityStatus = $compatibility.Status
+        }
+
+        if (-not $Approve) {
+            $result = New-ResultObject -Status 'PreviewOnly' -Approved $false -BackupCreated $false -Applied $false -Verified $false -RolledBack $false -Plan $plan -Backup $null -FinalState $null -Compatibility $compatibility
+        }
+        elseif ($item.ExecutionMode -eq 'ManualGuided') {
+            $result = New-ResultObject -Status 'ManualExecutionRequired' -Approved $true -BackupCreated $false -Applied $false -Verified $false -RolledBack $false -Plan $plan -Backup $null -FinalState $null -Compatibility $compatibility
+        }
+        else {
+            throw "Nicht unterstützter ExecutionMode: $($item.ExecutionMode)"
+        }
     }
 }
 
-if ($AsJson) { $result | ConvertTo-Json -Depth 8 } else { $result }
+if ($AsJson) { $result | ConvertTo-Json -Depth 10 } else { $result }
