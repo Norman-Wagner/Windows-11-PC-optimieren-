@@ -18,10 +18,13 @@ Wenn „Firmenmodus Lokal“, „Firmenrechner“ oder vergleichbar genannt wird
 3. Nutze aus [Symptom-Triage](references/symptom-triage.md) den kleinsten lesenden Prüfpfad.
 4. Wenn ein breiter Systemüberblick sinnvoll ist, nutze Snapshot 2.0 und danach die deterministische Findings Engine. Ein Finding ist eine Auffälligkeit, keine bestätigte Ursache.
 5. Trenne Befund, wahrscheinliche Ursache, offene Hypothesen und nächsten Schritt. Ohne Daten gibt es keinen Befund.
-6. Prüfe jede Optimierung mit der [Entscheidungsmatrix](references/optimization-decision-matrix.md): Messwert, Nutzen, Risiko, Rückweg, Nachmessung.
-7. Lege vor jeder G2- bis G4-Änderung Aktion, Grund, Rechte, Dauer, Neustart, Nebenwirkungen, Rückweg und Erfolgskriterium offen. Warte auf ausdrückliche Zustimmung.
-8. Ändere genau eine begrenzte Sache und miss danach mit demselben Signal.
-9. Dokumentiere Ergebnis, Restunsicherheit und Rückbau.
+6. Ermittle zu bestätigten Findings nur passende Optionen aus dem Remediation-Katalog. Ein Katalogeintrag ist ein Handlungsplan, keine automatische Ausführungserlaubnis.
+7. Prüfe jede Optimierung mit der [Entscheidungsmatrix](references/optimization-decision-matrix.md): Messwert, Nutzen, Risiko, Reversibilität, Rückweg und Nachmessung.
+8. Vor jeder Änderung zuerst Preview/Plan ausgeben. G2 bis G4 benötigen zusätzlich Aktion, Grund, Rechte, Neustart, Nebenwirkungen, Rückweg und ausdrückliche Zustimmung.
+9. Produktive Katalogmaßnahmen sind derzeit `ManualGuided`: Die Change Engine automatisiert keine Windows-Schreiboperation allein aufgrund eines Findings.
+10. Ändere höchstens eine begrenzte Sache und miss danach mit demselben Signal.
+11. Nutze für Vorher/Nachher-Snapshots die Vergleichs-Engine. Momentaufnahmen wie einzelne CPU- oder RAM-Werte dürfen den Gesamterfolg nicht allein bestätigen.
+12. Dokumentiere Ergebnis, Restunsicherheit und Rückbau.
 
 ## Auswahl der Referenzen
 
@@ -41,17 +44,24 @@ Wenn „Firmenmodus Lokal“, „Firmenrechner“ oder vergleichbar genannt wird
 - [Get-WindowsPcSnapshot.ps1](scripts/Get-WindowsPcSnapshot.ps1): lesende technische Übersicht nach Snapshot-Schema 2.0 ohne Benutzer-, Computer-, Serien-, MAC-, IP-, Prozessnamen- oder persönliche Dateidaten.
 - [windows-pc-snapshot.schema.json](schemas/windows-pc-snapshot.schema.json): maschinenlesbarer Vertrag für Snapshot 2.0.
 - [Invoke-DiagnosticRules.ps1](engine/Diagnostics/Invoke-DiagnosticRules.ps1): rein lesende, deterministische Auswertung des Snapshots. Findings enthalten Evidenz, Severity und Confidence; `IsConfirmedCause` ist immer `false`.
+- [Compare-WindowsPcSnapshot.ps1](engine/Measurement/Compare-WindowsPcSnapshot.ps1): vergleicht Snapshot 2.0 vorher/nachher und trennt Verbesserung, Regression, unverändert und unentschieden.
+- [Get-RemediationOptions.ps1](engine/Remediation/Get-RemediationOptions.ps1): ordnet Findings ausschließlich passende Maßnahmen aus dem Katalog zu.
+- [catalog.json](remediations/catalog.json): zehn initiale, geführte Maßnahmen mit Risiko, Reversibilität, Administrator- und Neustartbedarf, erwartetem Nutzen und Validierung.
+- [Invoke-ControlledChange.ps1](engine/Change/Invoke-ControlledChange.ps1): erzwingt Preview und explizite Freigabe. Produktive Maßnahmen bleiben `ManualGuided`; der vollständige Backup/Apply/Verify/Rollback-Lifecycle ist nur über einen nicht schreibenden internen TestHarness freigeschaltet.
 - [Measure-OptimizationBaseline.ps1](scripts/Measure-OptimizationBaseline.ps1): datensparsame Vorher-/Nachher-Baseline; nur Messung, keine Änderung.
 - [Test-DriverPackage.ps1](scripts/Test-DriverPackage.ps1): lokale SHA-256- und Authenticode-Prüfung; kein Download und keine Installation.
-- Test-LocalOnlyPolicy.ps1 im Repository-Wurzelordner: statische Prüfung der Diagnose-Skripte und der Findings Engine auf typische Netzwerk-, Download-, Fernsteuerungs- und Löschbefehle.
+- Test-LocalOnlyPolicy.ps1 im Repository-Wurzelordner: statische Prüfung der Diagnose-Skripte und der Engine auf typische Netzwerk-, Download-, Fernsteuerungs- und Löschbefehle.
 
-## Umgang mit Findings
+## Umgang mit Findings und Remediations
 
 - Verwende Findings als priorisierte Prüfpunkte, nicht als automatische Diagnose.
 - `High` Confidence bedeutet hohe Sicherheit, dass der gemessene Zustand vorliegt, nicht dass er die Nutzerbeschwerde verursacht.
 - `Low` Confidence bei Momentaufnahmen verlangt eine Wiederholungsmessung unter definierten Bedingungen.
 - Sicherheits- und Datenträgerwarnungen dürfen priorisiert werden, ohne daraus eine Leistungsursache abzuleiten.
-- Keine Systemänderung allein aufgrund eines Findings ausführen.
+- Eine Remediation muss zu mindestens einem konkreten Finding passen.
+- `R0` bedeutet rein lesend, `R1` vollständig reversibel, `R2` Best-Effort-Rollback, `R3` manuelle Wiederherstellung beziehungsweise nicht technisch rückrollbare Wirkung.
+- Keine Systemänderung allein aufgrund eines Findings oder eines Katalogeintrags ausführen.
+- `PreviewOnly` ist keine Ausführung. `ManualExecutionRequired` bedeutet ausdrücklich, dass die Engine selbst nichts verändert hat.
 
 ## Nicht verhandelbare Grenzen
 
