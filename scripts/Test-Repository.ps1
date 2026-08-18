@@ -54,9 +54,12 @@ $requiredPaths = @(
     'skills\windows-pc-guru\engine\Diagnostics\New-DiagnosticFinding.ps1',
     'skills\windows-pc-guru\engine\Diagnostics\Invoke-DiagnosticRules.ps1',
     'skills\windows-pc-guru\engine\Measurement\Compare-WindowsPcSnapshot.ps1',
+    'skills\windows-pc-guru\engine\Compatibility\Get-RemediationCompatibilityContext.ps1',
+    'skills\windows-pc-guru\engine\Compatibility\Test-RemediationCompatibility.ps1',
     'skills\windows-pc-guru\engine\Remediation\Get-RemediationOptions.ps1',
     'skills\windows-pc-guru\engine\Change\Invoke-ControlledChange.ps1',
     'skills\windows-pc-guru\schemas\windows-pc-snapshot.schema.json',
+    'skills\windows-pc-guru\schemas\remediation.schema.json',
     'skills\windows-pc-guru\remediations\catalog.json',
     'skills\windows-pc-guru\assets\diagnosebericht-vorlage.md',
     'skills\windows-pc-guru\assets\aenderungsplan-vorlage.md',
@@ -67,6 +70,7 @@ $requiredPaths = @(
     'tests\Unit\DiagnosticRules.Tests.ps1',
     'tests\Unit\SnapshotComparison.Tests.ps1',
     'tests\Unit\RemediationCatalog.Tests.ps1',
+    'tests\Unit\RemediationCompatibility.Tests.ps1',
     'tests\Unit\ControlledChange.Tests.ps1',
     'tests\Integration\Snapshot.Tests.ps1',
     'tests\Privacy\RuntimePrivacy.Tests.ps1'
@@ -118,14 +122,19 @@ $jsonFiles = @(
     (Join-Path $repositoryRoot '.codex-plugin\plugin.json'),
     (Join-Path $repositoryRoot '.claude-plugin\plugin.json'),
     (Join-Path $skillRoot 'schemas\windows-pc-snapshot.schema.json'),
+    (Join-Path $skillRoot 'schemas\remediation.schema.json'),
     (Join-Path $skillRoot 'remediations\catalog.json')
 )
 foreach ($jsonFile in $jsonFiles) {
     $null = Get-Content -Raw -Encoding UTF8 -LiteralPath $jsonFile | ConvertFrom-Json
 }
 
-$catalog = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $skillRoot 'remediations\catalog.json') | ConvertFrom-Json
-Assert-True -Condition ($catalog.SchemaVersion -eq '1.0') -Message 'Der Remediation-Katalog hat eine unerwartete SchemaVersion.'
+$catalogPath = Join-Path $skillRoot 'remediations\catalog.json'
+$catalogText = Get-Content -Raw -Encoding UTF8 -LiteralPath $catalogPath
+$catalog = $catalogText | ConvertFrom-Json
+$remediationSchemaText = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $skillRoot 'schemas\remediation.schema.json')
+Assert-True -Condition ($catalog.SchemaVersion -eq '2.0') -Message 'Der Remediation-Katalog hat eine unerwartete SchemaVersion.'
+Assert-True -Condition ($catalogText | Test-Json -Schema $remediationSchemaText) -Message 'Der Remediation-Katalog verletzt remediation.schema.json.'
 Assert-True -Condition (@($catalog.Remediations).Count -eq 10) -Message 'Der initiale Remediation-Katalog muss genau zehn Einträge enthalten.'
 Assert-True -Condition (@($catalog.Remediations | Where-Object ExecutionMode -ne 'ManualGuided').Count -eq 0) -Message 'Produktive Remediations dürfen derzeit nicht automatisiert ausgeführt werden.'
 
@@ -178,15 +187,38 @@ if ($RunDiagnosticsSmokeTest) {
     Assert-True -Condition (-not $diagnosis.NetworkUsed) -Message 'Die Findings Engine meldet unerwarteten Netzwerkzugriff.'
     Assert-True -Condition (@($diagnosis.Findings | Where-Object { $_.IsConfirmedCause }).Count -eq 0) -Message 'Ein Finding wurde unzulässig als bestätigte Ursache markiert.'
 
+    $contextScript = Join-Path $skillRoot 'engine\Compatibility\Get-RemediationCompatibilityContext.ps1'
+    $liveContext = & $contextScript
+    Assert-True -Condition ($liveContext.SchemaVersion -eq '1.0') -Message 'Der Kompatibilitätskontext hat eine unerwartete SchemaVersion.'
+    Assert-True -Condition (-not $liveContext.NetworkUsed -and -not $liveContext.FilesChanged) -Message 'Der Kompatibilitätskontext darf weder Netzwerk noch Schreibzugriff verwenden.'
+
+    $compatibleContext = [pscustomobject]@{
+        SchemaVersion = '1.0'
+        OperatingSystem = [pscustomobject]@{ Family = 'Windows11'; Edition = 'Pro'; BuildNumber = 26100; Architecture = 'x64' }
+        DeviceType = 'Desktop'
+        Capabilities = @('System.CimInventory')
+    }
+
     $remediationScript = Join-Path $skillRoot 'engine\Remediation\Get-RemediationOptions.ps1'
-    $remediation = & $remediationScript -FindingId 'startup.high-count'
-    Assert-True -Condition ($remediation.OptionCount -eq 1) -Message 'Der Remediation-Lookup lieferte nicht genau die erwartete Option.'
+    $remediation = & $remediationScript -FindingId 'startup.high-count' -CompatibilityContext $compatibleContext
+    Assert-True -Condition ($remediation.SchemaVersion -eq '2.0') -Message 'Der Remediation-Lookup hat eine unerwartete SchemaVersion.'
+    Assert-True -Condition ($remediation.OptionCount -eq 1 -and $remediation.CompatibleOptionCount -eq 1) -Message 'Der Remediation-Lookup lieferte nicht genau die erwartete kompatible Option.'
     Assert-True -Condition (-not $remediation.NetworkUsed -and -not $remediation.FilesChanged) -Message 'Der Remediation-Lookup darf weder Netzwerk noch Schreibzugriff verwenden.'
 
     $changeScript = Join-Path $skillRoot 'engine\Change\Invoke-ControlledChange.ps1'
-    $preview = & $changeScript -RecipeId 'startup.review-entries'
-    Assert-True -Condition ($preview.Status -eq 'PreviewOnly') -Message 'Die Change Engine muss ohne Freigabe im PreviewOnly-Status bleiben.'
+    $preview = & $changeScript -RecipeId 'startup.review-entries' -CompatibilityContext $compatibleContext
+    Assert-True -Condition ($preview.Status -eq 'PreviewOnly') -Message 'Die Change Engine muss bei kompatiblem Kontext ohne Freigabe im PreviewOnly-Status bleiben.'
     Assert-True -Condition (-not $preview.Applied -and -not $preview.FilesChanged -and -not $preview.NetworkUsed) -Message 'PreviewOnly darf keine Änderung durchführen.'
+
+    $serverContext = [pscustomobject]@{
+        SchemaVersion = '1.0'
+        OperatingSystem = [pscustomobject]@{ Family = 'WindowsServer'; Edition = 'Unknown'; BuildNumber = 26100; Architecture = 'x64' }
+        DeviceType = 'Server'
+        Capabilities = @('System.CimInventory')
+    }
+    $blocked = & $changeScript -RecipeId 'startup.review-entries' -CompatibilityContext $serverContext
+    Assert-True -Condition ($blocked.Status -eq 'CompatibilityBlocked') -Message 'Die Change Engine muss inkompatible Systeme vor dem Preview blockieren.'
+    Assert-True -Condition ($null -eq $blocked.Plan -and -not $blocked.Applied) -Message 'Bei inkompatiblem System darf kein Änderungsplan erzeugt oder angewendet werden.'
 
     $baselineScript = Join-Path $skillRoot 'scripts\Measure-OptimizationBaseline.ps1'
     $baseline = & $baselineScript -AsJson | ConvertFrom-Json
