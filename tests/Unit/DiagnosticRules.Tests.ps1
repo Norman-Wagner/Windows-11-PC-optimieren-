@@ -67,7 +67,7 @@ Describe 'Invoke-DiagnosticRules' {
         $ids | Should -Contain 'performance.high-processor-sample'
         $ids | Should -Contain 'performance.low-free-memory-sample'
         $ids | Should -Contain 'reliability.system-error-burst'
-        @($result.Findings | Where-Object IsConfirmedCause).Count | Should -Be 0
+        @($result.Findings | Where-Object { $_.IsConfirmedCause }).Count | Should -Be 0
     }
 
     It 'emits no findings for a healthy fixture' {
