@@ -2,7 +2,7 @@
 
 BeforeAll {
     $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-    . (Join-Path $repositoryRoot 'engine\Diagnostics\New-DiagnosticFinding.ps1')
+    . (Join-Path $repositoryRoot 'skills\windows-pc-guru\engine\Diagnostics\New-DiagnosticFinding.ps1')
 }
 
 Describe 'New-DiagnosticFinding' {
