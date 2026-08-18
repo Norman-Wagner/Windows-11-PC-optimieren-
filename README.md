@@ -16,6 +16,7 @@ Der Skill arbeitet symptomorientiert, verlangt vor Änderungen eine konkrete Fre
 - Snapshots mit deterministischen Regeln auf Auffälligkeiten prüfen, ohne diese als bestätigte Ursache auszugeben;
 - Vorher-/Nachher-Snapshots vergleichen und Verbesserung, Regression oder unklare Momentwerte unterscheiden;
 - Findings auf einen kontrollierten Katalog mit zehn geführten Maßnahmen abbilden;
+- jede Remediation vor dem Preview gegen Windows-Familie, Edition, Build, Architektur, Gerätetyp und lokale Fähigkeiten prüfen;
 - Änderungspläne als Preview erzeugen und automatische Windows-Schreibaktionen derzeit bewusst blockieren.
 
 ## Was er bewusst nicht tut
@@ -24,6 +25,7 @@ Der Skill arbeitet symptomorientiert, verlangt vor Änderungen eine konkrete Fre
 - kein Abschalten von Defender, Firewall, SmartScreen, Secure Boot, BitLocker oder Signaturprüfung;
 - keine Löschung, Installation, Treiber-, BIOS-, BitLocker- oder Partitionsänderung ohne Zustimmung und Rückweg;
 - keine automatische Windows-Änderung allein aufgrund eines Findings oder Katalogeintrags;
+- kein Preview auf einem als inkompatibel erkannten System;
 - kein Zugriff auf E-Mails, Browserdaten oder persönliche Dateien als Teil einer normalen PC-Diagnose;
 - keine erfundenen Diagnosen oder behaupteten Verbesserungen.
 
@@ -36,8 +38,11 @@ Der kanonische Skill liegt unter [skills/windows-pc-guru](skills/windows-pc-guru
 - [Erweiterte Diagnose](skills/windows-pc-guru/references/advanced-diagnostics.md)
 - [Sicherheits- und Datenschutz-Audit](skills/windows-pc-guru/references/security-baseline-audit.md)
 - [Snapshot-Schema 2.0](skills/windows-pc-guru/schemas/windows-pc-snapshot.schema.json)
+- [Remediation-Schema 2.0](skills/windows-pc-guru/schemas/remediation.schema.json)
 - [Deterministische Findings Engine](skills/windows-pc-guru/engine/Diagnostics/Invoke-DiagnosticRules.ps1)
 - [Snapshot-Vergleich](skills/windows-pc-guru/engine/Measurement/Compare-WindowsPcSnapshot.ps1)
+- [Kompatibilitätskontext](skills/windows-pc-guru/engine/Compatibility/Get-RemediationCompatibilityContext.ps1)
+- [Kompatibilitätsprüfung](skills/windows-pc-guru/engine/Compatibility/Test-RemediationCompatibility.ps1)
 - [Remediation-Katalog](skills/windows-pc-guru/remediations/catalog.json)
 - [Kontrollierte Change Engine](skills/windows-pc-guru/engine/Change/Invoke-ControlledChange.ps1)
 - Profile: [Büro](skills/windows-pc-guru/profiles/office.md), [Entwicklung](skills/windows-pc-guru/profiles/development.md), [Notebook](skills/windows-pc-guru/profiles/laptop.md), [Spiele](skills/windows-pc-guru/profiles/gaming.md)
@@ -86,7 +91,13 @@ pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Measurement\Compare-Window
 
 Richtungsbezogene Signale wie freier Systemlaufwerkspeicher, Autostart-Anzahl, Gerätefehler und ausstehender Neustart können als Verbesserung oder Regression eingeordnet werden. Einzelne CPU- oder RAM-Momentwerte bleiben bewusst `Inconclusive`.
 
-## Remediation und Änderungsplan
+## Remediation, Kompatibilität und Änderungsplan
+
+Lokalen Kompatibilitätskontext erfassen:
+
+```powershell
+pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Compatibility\Get-RemediationCompatibilityContext.ps1 -AsJson
+```
 
 Passende Optionen zu einem Finding anzeigen:
 
@@ -94,13 +105,15 @@ Passende Optionen zu einem Finding anzeigen:
 pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Remediation\Get-RemediationOptions.ps1 -FindingId startup.high-count -AsJson
 ```
 
+Jede Option enthält ein `CompatibilityResult`. Nur `Compatible` ist freigegeben. `Blocked` bedeutet technische Unverträglichkeit; `ReviewRequired` bedeutet, dass wichtige Systemmerkmale nicht sicher bestimmt werden konnten.
+
 Preview einer Maßnahme:
 
 ```powershell
 pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Change\Invoke-ControlledChange.ps1 -RecipeId startup.review-entries -AsJson
 ```
 
-Auch mit `-Approve` bleiben die aktuellen produktiven Katalogeinträge `ManualGuided`; die Engine führt noch keine Windows-Schreiboperation automatisch aus. Der Backup/Apply/Verify/Rollback-Lifecycle wird ausschließlich über einen internen, nicht schreibenden TestHarness automatisiert getestet.
+Die Change Engine prüft die Kompatibilität vor dem Preview. Bei `CompatibilityBlocked` oder `CompatibilityReviewRequired` wird kein Änderungsplan erzeugt. Auch mit `-Approve` bleiben die aktuellen produktiven Katalogeinträge `ManualGuided`; die Engine führt noch keine Windows-Schreiboperation automatisch aus. Der Backup/Apply/Verify/Rollback-Lifecycle wird ausschließlich über einen internen, nicht schreibenden TestHarness automatisiert getestet.
 
 ## Messung
 
@@ -117,7 +130,7 @@ pwsh -NoProfile -File .\scripts\Test-Repository.ps1 -RunDiagnosticsSmokeTest
 Invoke-Pester -Path .\tests -CI -Output Detailed
 ```
 
-Die GitHub-Actions-Pipeline validiert Repository-Struktur, PowerShell-Syntax, lokale Datenschutzregeln, Snapshot 2.0, Findings Engine, Snapshot-Vergleich, Remediation-Katalog, Change-Preview, PSScriptAnalyzer und Pester-Tests.
+Die GitHub-Actions-Pipeline validiert Repository-Struktur, PowerShell-Syntax, lokale Datenschutzregeln, Snapshot 2.0, Findings Engine, Snapshot-Vergleich, Remediation-Schema 2.0, Compatibility Engine, Change-Preview, PSScriptAnalyzer und Pester-Tests.
 
 ## Lizenz und Verantwortung
 
