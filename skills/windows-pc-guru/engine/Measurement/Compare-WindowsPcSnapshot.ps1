@@ -141,7 +141,7 @@ $overall = 'Inconclusive'
 if (@($confirmed | Where-Object Status -eq 'Regressed').Count -gt 0) {
     $overall = 'RegressionDetected'
 }
-elif (@($confirmed | Where-Object Status -eq 'Improved').Count -gt 0) {
+elseif (@($confirmed | Where-Object Status -eq 'Improved').Count -gt 0) {
     $overall = 'ImprovementDetected'
 }
 
