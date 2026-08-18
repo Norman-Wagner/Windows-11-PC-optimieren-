@@ -53,7 +53,11 @@ $requiredPaths = @(
     'skills\windows-pc-guru\scripts\Test-DriverPackage.ps1',
     'skills\windows-pc-guru\engine\Diagnostics\New-DiagnosticFinding.ps1',
     'skills\windows-pc-guru\engine\Diagnostics\Invoke-DiagnosticRules.ps1',
+    'skills\windows-pc-guru\engine\Measurement\Compare-WindowsPcSnapshot.ps1',
+    'skills\windows-pc-guru\engine\Remediation\Get-RemediationOptions.ps1',
+    'skills\windows-pc-guru\engine\Change\Invoke-ControlledChange.ps1',
     'skills\windows-pc-guru\schemas\windows-pc-snapshot.schema.json',
+    'skills\windows-pc-guru\remediations\catalog.json',
     'skills\windows-pc-guru\assets\diagnosebericht-vorlage.md',
     'skills\windows-pc-guru\assets\aenderungsplan-vorlage.md',
     'scripts\Build-SkillPackage.ps1',
@@ -61,6 +65,9 @@ $requiredPaths = @(
     'tests\behavior-cases.md',
     'tests\Unit\DiagnosticFinding.Tests.ps1',
     'tests\Unit\DiagnosticRules.Tests.ps1',
+    'tests\Unit\SnapshotComparison.Tests.ps1',
+    'tests\Unit\RemediationCatalog.Tests.ps1',
+    'tests\Unit\ControlledChange.Tests.ps1',
     'tests\Integration\Snapshot.Tests.ps1',
     'tests\Privacy\RuntimePrivacy.Tests.ps1'
 )
@@ -110,11 +117,17 @@ Assert-True -Condition ($openAiYaml -match '\$windows-pc-guru') -Message 'Der Op
 $jsonFiles = @(
     (Join-Path $repositoryRoot '.codex-plugin\plugin.json'),
     (Join-Path $repositoryRoot '.claude-plugin\plugin.json'),
-    (Join-Path $skillRoot 'schemas\windows-pc-snapshot.schema.json')
+    (Join-Path $skillRoot 'schemas\windows-pc-snapshot.schema.json'),
+    (Join-Path $skillRoot 'remediations\catalog.json')
 )
 foreach ($jsonFile in $jsonFiles) {
     $null = Get-Content -Raw -Encoding UTF8 -LiteralPath $jsonFile | ConvertFrom-Json
 }
+
+$catalog = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $skillRoot 'remediations\catalog.json') | ConvertFrom-Json
+Assert-True -Condition ($catalog.SchemaVersion -eq '1.0') -Message 'Der Remediation-Katalog hat eine unerwartete SchemaVersion.'
+Assert-True -Condition (@($catalog.Remediations).Count -eq 10) -Message 'Der initiale Remediation-Katalog muss genau zehn Einträge enthalten.'
+Assert-True -Condition (@($catalog.Remediations | Where-Object ExecutionMode -ne 'ManualGuided').Count -eq 0) -Message 'Produktive Remediations dürfen derzeit nicht automatisiert ausgeführt werden.'
 
 $powerShellFiles = Get-ChildItem -Path $repositoryRoot -Recurse -File -Filter '*.ps1'
 foreach ($powerShellFile in $powerShellFiles) {
@@ -164,6 +177,16 @@ if ($RunDiagnosticsSmokeTest) {
     Assert-True -Condition ($diagnosis.SnapshotSchemaVersion -eq '2.0') -Message 'Die Findings Engine akzeptierte den Snapshot nicht korrekt.'
     Assert-True -Condition (-not $diagnosis.NetworkUsed) -Message 'Die Findings Engine meldet unerwarteten Netzwerkzugriff.'
     Assert-True -Condition (@($diagnosis.Findings | Where-Object { $_.IsConfirmedCause }).Count -eq 0) -Message 'Ein Finding wurde unzulässig als bestätigte Ursache markiert.'
+
+    $remediationScript = Join-Path $skillRoot 'engine\Remediation\Get-RemediationOptions.ps1'
+    $remediation = & $remediationScript -FindingId 'startup.high-count'
+    Assert-True -Condition ($remediation.OptionCount -eq 1) -Message 'Der Remediation-Lookup lieferte nicht genau die erwartete Option.'
+    Assert-True -Condition (-not $remediation.NetworkUsed -and -not $remediation.FilesChanged) -Message 'Der Remediation-Lookup darf weder Netzwerk noch Schreibzugriff verwenden.'
+
+    $changeScript = Join-Path $skillRoot 'engine\Change\Invoke-ControlledChange.ps1'
+    $preview = & $changeScript -RecipeId 'startup.review-entries'
+    Assert-True -Condition ($preview.Status -eq 'PreviewOnly') -Message 'Die Change Engine muss ohne Freigabe im PreviewOnly-Status bleiben.'
+    Assert-True -Condition (-not $preview.Applied -and -not $preview.FilesChanged -and -not $preview.NetworkUsed) -Message 'PreviewOnly darf keine Änderung durchführen.'
 
     $baselineScript = Join-Path $skillRoot 'scripts\Measure-OptimizationBaseline.ps1'
     $baseline = & $baselineScript -AsJson | ConvertFrom-Json
