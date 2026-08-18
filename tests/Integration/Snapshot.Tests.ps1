@@ -2,9 +2,10 @@
 
 BeforeAll {
     $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-    $snapshotScript = Join-Path $repositoryRoot 'skills\windows-pc-guru\scripts\Get-WindowsPcSnapshot.ps1'
-    $rulesScript = Join-Path $repositoryRoot 'engine\Diagnostics\Invoke-DiagnosticRules.ps1'
-    $schemaPath = Join-Path $repositoryRoot 'schemas\windows-pc-snapshot.schema.json'
+    $skillRoot = Join-Path $repositoryRoot 'skills\windows-pc-guru'
+    $snapshotScript = Join-Path $skillRoot 'scripts\Get-WindowsPcSnapshot.ps1'
+    $rulesScript = Join-Path $skillRoot 'engine\Diagnostics\Invoke-DiagnosticRules.ps1'
+    $schemaPath = Join-Path $skillRoot 'schemas\windows-pc-snapshot.schema.json'
 }
 
 Describe 'Windows PC Snapshot 2.0' {
