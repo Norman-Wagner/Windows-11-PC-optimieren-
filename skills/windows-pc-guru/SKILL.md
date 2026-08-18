@@ -19,12 +19,14 @@ Wenn „Firmenmodus Lokal“, „Firmenrechner“ oder vergleichbar genannt wird
 4. Wenn ein breiter Systemüberblick sinnvoll ist, nutze Snapshot 2.0 und danach die deterministische Findings Engine. Ein Finding ist eine Auffälligkeit, keine bestätigte Ursache.
 5. Trenne Befund, wahrscheinliche Ursache, offene Hypothesen und nächsten Schritt. Ohne Daten gibt es keinen Befund.
 6. Ermittle zu bestätigten Findings nur passende Optionen aus dem Remediation-Katalog. Ein Katalogeintrag ist ein Handlungsplan, keine automatische Ausführungserlaubnis.
-7. Prüfe jede Optimierung mit der [Entscheidungsmatrix](references/optimization-decision-matrix.md): Messwert, Nutzen, Risiko, Reversibilität, Rückweg und Nachmessung.
-8. Vor jeder Änderung zuerst Preview/Plan ausgeben. G2 bis G4 benötigen zusätzlich Aktion, Grund, Rechte, Neustart, Nebenwirkungen, Rückweg und ausdrückliche Zustimmung.
-9. Produktive Katalogmaßnahmen sind derzeit `ManualGuided`: Die Change Engine automatisiert keine Windows-Schreiboperation allein aufgrund eines Findings.
-10. Ändere höchstens eine begrenzte Sache und miss danach mit demselben Signal.
-11. Nutze für Vorher/Nachher-Snapshots die Vergleichs-Engine. Momentaufnahmen wie einzelne CPU- oder RAM-Werte dürfen den Gesamterfolg nicht allein bestätigen.
-12. Dokumentiere Ergebnis, Restunsicherheit und Rückbau.
+7. Erfasse vor jedem Remediation-Preview den lokalen Kompatibilitätskontext. Prüfe Windows-Familie, Edition, Build, Architektur, Gerätetyp und erforderliche lokale Fähigkeiten gegen die Compatibility-Metadaten des Katalogeintrags.
+8. Bei `CompatibilityBlocked` keinen Änderungsplan erzeugen. Bei `CompatibilityReviewRequired` ebenfalls nicht fortfahren, bis der unbekannte technische Kontext verlässlich geklärt ist. Nur `Compatible` darf zum Preview führen.
+9. Prüfe jede Optimierung mit der [Entscheidungsmatrix](references/optimization-decision-matrix.md): Messwert, Nutzen, Risiko, Reversibilität, Rückweg und Nachmessung.
+10. Vor jeder Änderung zuerst Preview/Plan ausgeben. G2 bis G4 benötigen zusätzlich Aktion, Grund, Rechte, Neustart, Nebenwirkungen, Rückweg und ausdrückliche Zustimmung.
+11. Produktive Katalogmaßnahmen sind derzeit `ManualGuided`: Die Change Engine automatisiert keine Windows-Schreiboperation allein aufgrund eines Findings.
+12. Ändere höchstens eine begrenzte Sache und miss danach mit demselben Signal.
+13. Nutze für Vorher/Nachher-Snapshots die Vergleichs-Engine. Momentaufnahmen wie einzelne CPU- oder RAM-Werte dürfen den Gesamterfolg nicht allein bestätigen.
+14. Dokumentiere Ergebnis, Restunsicherheit und Rückbau.
 
 ## Auswahl der Referenzen
 
@@ -43,11 +45,14 @@ Wenn „Firmenmodus Lokal“, „Firmenrechner“ oder vergleichbar genannt wird
 
 - [Get-WindowsPcSnapshot.ps1](scripts/Get-WindowsPcSnapshot.ps1): lesende technische Übersicht nach Snapshot-Schema 2.0 ohne Benutzer-, Computer-, Serien-, MAC-, IP-, Prozessnamen- oder persönliche Dateidaten.
 - [windows-pc-snapshot.schema.json](schemas/windows-pc-snapshot.schema.json): maschinenlesbarer Vertrag für Snapshot 2.0.
+- [remediation.schema.json](schemas/remediation.schema.json): maschinenlesbarer Vertrag für Remediation-Katalog 2.0 inklusive Compatibility-Metadaten.
 - [Invoke-DiagnosticRules.ps1](engine/Diagnostics/Invoke-DiagnosticRules.ps1): rein lesende, deterministische Auswertung des Snapshots. Findings enthalten Evidenz, Severity und Confidence; `IsConfirmedCause` ist immer `false`.
 - [Compare-WindowsPcSnapshot.ps1](engine/Measurement/Compare-WindowsPcSnapshot.ps1): vergleicht Snapshot 2.0 vorher/nachher und trennt Verbesserung, Regression, unverändert und unentschieden.
-- [Get-RemediationOptions.ps1](engine/Remediation/Get-RemediationOptions.ps1): ordnet Findings ausschließlich passende Maßnahmen aus dem Katalog zu.
-- [catalog.json](remediations/catalog.json): zehn initiale, geführte Maßnahmen mit Risiko, Reversibilität, Administrator- und Neustartbedarf, erwartetem Nutzen und Validierung.
-- [Invoke-ControlledChange.ps1](engine/Change/Invoke-ControlledChange.ps1): erzwingt Preview und explizite Freigabe. Produktive Maßnahmen bleiben `ManualGuided`; der vollständige Backup/Apply/Verify/Rollback-Lifecycle ist nur über einen nicht schreibenden internen TestHarness freigeschaltet.
+- [Get-RemediationCompatibilityContext.ps1](engine/Compatibility/Get-RemediationCompatibilityContext.ps1): erfasst lokal und datensparsam Windows-Familie, Edition, Build, Architektur, Gerätetyp und verfügbare Diagnosefähigkeiten.
+- [Test-RemediationCompatibility.ps1](engine/Compatibility/Test-RemediationCompatibility.ps1): bewertet einen Katalogeintrag als `Compatible`, `Blocked` oder `ReviewRequired`.
+- [Get-RemediationOptions.ps1](engine/Remediation/Get-RemediationOptions.ps1): ordnet Findings ausschließlich passende Maßnahmen aus dem Katalog zu und bewertet deren Kompatibilität.
+- [catalog.json](remediations/catalog.json): zehn initiale, geführte Maßnahmen mit Risiko, Reversibilität, Administrator- und Neustartbedarf, erwartetem Nutzen, Validierung und Compatibility-Regeln.
+- [Invoke-ControlledChange.ps1](engine/Change/Invoke-ControlledChange.ps1): erzwingt Compatibility-Gate, Preview und explizite Freigabe. Produktive Maßnahmen bleiben `ManualGuided`; der vollständige Backup/Apply/Verify/Rollback-Lifecycle ist nur über einen nicht schreibenden internen TestHarness freigeschaltet.
 - [Measure-OptimizationBaseline.ps1](scripts/Measure-OptimizationBaseline.ps1): datensparsame Vorher-/Nachher-Baseline; nur Messung, keine Änderung.
 - [Test-DriverPackage.ps1](scripts/Test-DriverPackage.ps1): lokale SHA-256- und Authenticode-Prüfung; kein Download und keine Installation.
 - Test-LocalOnlyPolicy.ps1 im Repository-Wurzelordner: statische Prüfung der Diagnose-Skripte und der Engine auf typische Netzwerk-, Download-, Fernsteuerungs- und Löschbefehle.
@@ -60,6 +65,8 @@ Wenn „Firmenmodus Lokal“, „Firmenrechner“ oder vergleichbar genannt wird
 - Sicherheits- und Datenträgerwarnungen dürfen priorisiert werden, ohne daraus eine Leistungsursache abzuleiten.
 - Eine Remediation muss zu mindestens einem konkreten Finding passen.
 - `R0` bedeutet rein lesend, `R1` vollständig reversibel, `R2` Best-Effort-Rollback, `R3` manuelle Wiederherstellung beziehungsweise nicht technisch rückrollbare Wirkung.
+- `Unknown` bei Edition, Build, Architektur oder Gerätetyp niemals stillschweigend als kompatibel behandeln. Unklarheit führt zu `CompatibilityReviewRequired`.
+- Explizite Abweichungen von unterstützter Windows-Familie, Build-Grenze, Architektur, Gerätetyp oder benötigten Fähigkeiten führen zu `CompatibilityBlocked`.
 - Keine Systemänderung allein aufgrund eines Findings oder eines Katalogeintrags ausführen.
 - `PreviewOnly` ist keine Ausführung. `ManualExecutionRequired` bedeutet ausdrücklich, dass die Engine selbst nichts verändert hat.
 
@@ -80,8 +87,9 @@ Nutze nur die passenden Abschnitte:
 1. **Ausgangslage** oder **Befund**
 2. **Wahrscheinliche Ursache**
 3. **Nächster sicherer Schritt**
-4. **Änderungsplan und Rückweg**
-5. **Zustimmung erforderlich**
-6. **Validierung**
+4. **Kompatibilitätsstatus**
+5. **Änderungsplan und Rückweg**
+6. **Zustimmung erforderlich**
+7. **Validierung**
 
 Eine Verbesserung gilt erst nach passender Nachmessung als bestätigt.
