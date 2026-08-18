@@ -51,11 +51,11 @@ $requiredPaths = @(
     'skills\windows-pc-guru\scripts\Get-WindowsPcSnapshot.ps1',
     'skills\windows-pc-guru\scripts\Measure-OptimizationBaseline.ps1',
     'skills\windows-pc-guru\scripts\Test-DriverPackage.ps1',
+    'skills\windows-pc-guru\engine\Diagnostics\New-DiagnosticFinding.ps1',
+    'skills\windows-pc-guru\engine\Diagnostics\Invoke-DiagnosticRules.ps1',
+    'skills\windows-pc-guru\schemas\windows-pc-snapshot.schema.json',
     'skills\windows-pc-guru\assets\diagnosebericht-vorlage.md',
     'skills\windows-pc-guru\assets\aenderungsplan-vorlage.md',
-    'engine\Diagnostics\New-DiagnosticFinding.ps1',
-    'engine\Diagnostics\Invoke-DiagnosticRules.ps1',
-    'schemas\windows-pc-snapshot.schema.json',
     'scripts\Build-SkillPackage.ps1',
     'scripts\Test-LocalOnlyPolicy.ps1',
     'tests\behavior-cases.md',
@@ -110,7 +110,7 @@ Assert-True -Condition ($openAiYaml -match '\$windows-pc-guru') -Message 'Der Op
 $jsonFiles = @(
     (Join-Path $repositoryRoot '.codex-plugin\plugin.json'),
     (Join-Path $repositoryRoot '.claude-plugin\plugin.json'),
-    (Join-Path $repositoryRoot 'schemas\windows-pc-snapshot.schema.json')
+    (Join-Path $skillRoot 'schemas\windows-pc-snapshot.schema.json')
 )
 foreach ($jsonFile in $jsonFiles) {
     $null = Get-Content -Raw -Encoding UTF8 -LiteralPath $jsonFile | ConvertFrom-Json
@@ -126,7 +126,7 @@ foreach ($powerShellFile in $powerShellFiles) {
 
 $runtimeScripts = @(
     Get-ChildItem -Path (Join-Path $skillRoot 'scripts') -File -Filter '*.ps1'
-    Get-ChildItem -Path (Join-Path $repositoryRoot 'engine') -File -Filter '*.ps1' -Recurse
+    Get-ChildItem -Path (Join-Path $skillRoot 'engine') -File -Filter '*.ps1' -Recurse
 )
 $forbiddenRuntimePatterns = @(
     'Invoke-Expression',
@@ -159,7 +159,7 @@ if ($RunDiagnosticsSmokeTest) {
     Assert-True -Condition ($snapshot.PrivacyNotice -match 'Keine Benutzer') -Message 'Der Diagnose-Smoke-Test enthält keinen Datenschutzhinweis.'
     Assert-True -Condition (-not $snapshot.NetworkUsed) -Message 'Der Diagnose-Snapshot meldet unerwarteten Netzwerkzugriff.'
 
-    $rulesScript = Join-Path $repositoryRoot 'engine\Diagnostics\Invoke-DiagnosticRules.ps1'
+    $rulesScript = Join-Path $skillRoot 'engine\Diagnostics\Invoke-DiagnosticRules.ps1'
     $diagnosis = & $rulesScript -Snapshot $snapshot
     Assert-True -Condition ($diagnosis.SnapshotSchemaVersion -eq '2.0') -Message 'Die Findings Engine akzeptierte den Snapshot nicht korrekt.'
     Assert-True -Condition (-not $diagnosis.NetworkUsed) -Message 'Die Findings Engine meldet unerwarteten Netzwerkzugriff.'
