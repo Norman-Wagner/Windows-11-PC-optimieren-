@@ -37,6 +37,7 @@ Wenn „Firmenmodus Lokal“, „Firmenrechner“ oder vergleichbar genannt wird
 - Sicherheits- und Datenschutzaudit: [security-baseline-audit.md](references/security-baseline-audit.md)
 - Entwicklung und Automatisierung: [programming-and-automation.md](references/programming-and-automation.md)
 - sensible Daten und Diagnoseexporte: [privacy-and-sensitive-data.md](references/privacy-and-sensitive-data.md)
+- Remediation-Kompatibilität und Fail-closed-Regeln: [remediation-compatibility.md](references/remediation-compatibility.md)
 - verbindlicher Firmenmodus ohne Cloud-KI: [corporate-local-only.md](references/corporate-local-only.md)
 - aktuelle Quellen: [official-sources.md](references/official-sources.md)
 - profilspezifische Prioritäten: [Büro](profiles/office.md), [Entwicklung](profiles/development.md), [Notebook](profiles/laptop.md), [Spiele](profiles/gaming.md)
