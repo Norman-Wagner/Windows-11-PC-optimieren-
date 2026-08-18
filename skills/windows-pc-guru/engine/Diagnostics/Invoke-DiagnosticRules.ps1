@@ -53,9 +53,9 @@ if (-not (Test-HasProperty -Object $Snapshot -Name 'SchemaVersion') -or $Snapsho
 
 $findings = [System.Collections.Generic.List[object]]::new()
 
-if (Test-HasProperty -Object $Snapshot -Name 'Storage' -and Test-HasProperty -Object $Snapshot.Storage -Name 'Volumes') {
+if ((Test-HasProperty -Object $Snapshot -Name 'Storage') -and (Test-HasProperty -Object $Snapshot.Storage -Name 'Volumes')) {
     $systemVolume = @($Snapshot.Storage.Volumes | Where-Object {
-        Test-IsAvailableObject $_ -and $_.DriveLetter -eq 'C' -and $null -ne $_.FreePercent
+        (Test-IsAvailableObject $_) -and $_.DriveLetter -eq 'C' -and $null -ne $_.FreePercent
     } | Select-Object -First 1)
 
     if ($systemVolume.Count -eq 1) {
@@ -69,7 +69,7 @@ if (Test-HasProperty -Object $Snapshot -Name 'Storage' -and Test-HasProperty -Ob
     }
 
     $unhealthyVolumes = @($Snapshot.Storage.Volumes | Where-Object {
-        Test-IsAvailableObject $_ -and $null -ne $_.HealthStatus -and $_.HealthStatus -notin @('Healthy', 'Unknown')
+        (Test-IsAvailableObject $_) -and $null -ne $_.HealthStatus -and $_.HealthStatus -notin @('Healthy', 'Unknown')
     })
     if ($unhealthyVolumes.Count -gt 0) {
         $findings.Add((New-DiagnosticFinding -Id 'storage.volume-health-warning' -Severity 'Warning' -Confidence 'High' -Summary 'Mindestens ein Volume meldet einen auffälligen Gesundheitszustand.' -Evidence @{ AffectedCount = $unhealthyVolumes.Count } -SuggestedProbe 'Datenträgerzustand mit Windows- und Herstellerdiagnose verifizieren.'))
@@ -77,7 +77,7 @@ if (Test-HasProperty -Object $Snapshot -Name 'Storage' -and Test-HasProperty -Ob
 
     if (Test-HasProperty -Object $Snapshot.Storage -Name 'PhysicalDisks') {
         $unhealthyDisks = @($Snapshot.Storage.PhysicalDisks | Where-Object {
-            Test-IsAvailableObject $_ -and $null -ne $_.HealthStatus -and $_.HealthStatus -notin @('Healthy', 'Unknown')
+            (Test-IsAvailableObject $_) -and $null -ne $_.HealthStatus -and $_.HealthStatus -notin @('Healthy', 'Unknown')
         })
         if ($unhealthyDisks.Count -gt 0) {
             $findings.Add((New-DiagnosticFinding -Id 'storage.physical-disk-health-warning' -Severity 'Critical' -Confidence 'High' -Summary 'Mindestens ein physischer Datenträger meldet einen auffälligen Gesundheitszustand.' -Evidence @{ AffectedCount = $unhealthyDisks.Count } -SuggestedProbe 'Datensicherung priorisieren und Datenträgerdiagnose verifizieren.'))
@@ -85,9 +85,9 @@ if (Test-HasProperty -Object $Snapshot -Name 'Storage' -and Test-HasProperty -Ob
     }
 }
 
-if (Test-HasProperty -Object $Snapshot -Name 'Startup' -and Test-HasProperty -Object $Snapshot.Startup -Name 'Summary') {
+if ((Test-HasProperty -Object $Snapshot -Name 'Startup') -and (Test-HasProperty -Object $Snapshot.Startup -Name 'Summary')) {
     $startupSummary = @($Snapshot.Startup.Summary | Where-Object { Test-IsAvailableObject $_ } | Select-Object -First 1)
-    if ($startupSummary.Count -eq 1 -and Test-HasProperty -Object $startupSummary[0] -Name 'StartupCommandCount') {
+    if (($startupSummary.Count -eq 1) -and (Test-HasProperty -Object $startupSummary[0] -Name 'StartupCommandCount')) {
         $startupCount = [int]$startupSummary[0].StartupCommandCount
         if ($startupCount -ge 30) {
             $findings.Add((New-DiagnosticFinding -Id 'startup.high-count' -Severity 'Info' -Confidence 'Medium' -Summary 'Es wurden mindestens 30 Autostart-Einträge gezählt.' -Evidence @{ StartupCommandCount = $startupCount } -SuggestedProbe 'Autostarts einzeln nach Herausgeber, Zweck und Startauswirkung bewerten.'))
@@ -99,10 +99,10 @@ if (Test-HasProperty -Object $Snapshot -Name 'Security') {
     if (Test-HasProperty -Object $Snapshot.Security -Name 'Defender') {
         $defender = @($Snapshot.Security.Defender | Where-Object { Test-IsAvailableObject $_ } | Select-Object -First 1)
         if ($defender.Count -eq 1) {
-            if (Test-HasProperty -Object $defender[0] -Name 'AntivirusEnabled' -and $defender[0].AntivirusEnabled -eq $false) {
+            if ((Test-HasProperty -Object $defender[0] -Name 'AntivirusEnabled') -and $defender[0].AntivirusEnabled -eq $false) {
                 $findings.Add((New-DiagnosticFinding -Id 'security.antivirus-disabled' -Severity 'Critical' -Confidence 'High' -Summary 'Microsoft Defender Antivirus meldet AntivirusEnabled = false.' -Evidence @{ AntivirusEnabled = $false } -SuggestedProbe 'Prüfen, ob ein anderer verwalteter Virenschutz aktiv ist und warum Defender deaktiviert ist.'))
             }
-            elseif (Test-HasProperty -Object $defender[0] -Name 'RealTimeProtectionEnabled' -and $defender[0].RealTimeProtectionEnabled -eq $false) {
+            elseif ((Test-HasProperty -Object $defender[0] -Name 'RealTimeProtectionEnabled') -and $defender[0].RealTimeProtectionEnabled -eq $false) {
                 $findings.Add((New-DiagnosticFinding -Id 'security.realtime-protection-disabled' -Severity 'Warning' -Confidence 'High' -Summary 'Der Echtzeitschutz von Microsoft Defender ist deaktiviert.' -Evidence @{ RealTimeProtectionEnabled = $false } -SuggestedProbe 'Ursache und verwaltete Sicherheitsrichtlinien prüfen.'))
             }
         }
@@ -110,7 +110,7 @@ if (Test-HasProperty -Object $Snapshot -Name 'Security') {
 
     if (Test-HasProperty -Object $Snapshot.Security -Name 'FirewallProfiles') {
         $disabledFirewallProfiles = @($Snapshot.Security.FirewallProfiles | Where-Object {
-            Test-IsAvailableObject $_ -and Test-HasProperty -Object $_ -Name 'Enabled' -and $_.Enabled -eq $false
+            (Test-IsAvailableObject $_) -and (Test-HasProperty -Object $_ -Name 'Enabled') -and $_.Enabled -eq $false
         })
         if ($disabledFirewallProfiles.Count -gt 0) {
             $findings.Add((New-DiagnosticFinding -Id 'security.firewall-profile-disabled' -Severity 'Warning' -Confidence 'High' -Summary 'Mindestens ein Windows-Firewallprofil ist deaktiviert.' -Evidence @{ DisabledProfileCount = $disabledFirewallProfiles.Count } -SuggestedProbe 'Betroffene Profile und zentrale Richtlinien prüfen.'))
@@ -118,9 +118,9 @@ if (Test-HasProperty -Object $Snapshot -Name 'Security') {
     }
 }
 
-if (Test-HasProperty -Object $Snapshot -Name 'Updates' -and Test-HasProperty -Object $Snapshot.Updates -Name 'Reboot') {
+if ((Test-HasProperty -Object $Snapshot -Name 'Updates') -and (Test-HasProperty -Object $Snapshot.Updates -Name 'Reboot')) {
     $reboot = @($Snapshot.Updates.Reboot | Where-Object { Test-IsAvailableObject $_ } | Select-Object -First 1)
-    if ($reboot.Count -eq 1 -and Test-HasProperty -Object $reboot[0] -Name 'RebootPending' -and $reboot[0].RebootPending -eq $true) {
+    if (($reboot.Count -eq 1) -and (Test-HasProperty -Object $reboot[0] -Name 'RebootPending') -and $reboot[0].RebootPending -eq $true) {
         $findings.Add((New-DiagnosticFinding -Id 'updates.reboot-pending' -Severity 'Info' -Confidence 'High' -Summary 'Windows meldet einen ausstehenden Neustart.' -Evidence @{ RebootPending = $true } -SuggestedProbe 'Vor weitergehender Diagnose einen kontrollierten Neustart einplanen, sofern betrieblich möglich.'))
     }
 }
@@ -135,7 +135,7 @@ if (Test-HasProperty -Object $Snapshot -Name 'ProblemDevices') {
 if (Test-HasProperty -Object $Snapshot -Name 'Performance') {
     if (Test-HasProperty -Object $Snapshot.Performance -Name 'Processor') {
         $processor = @($Snapshot.Performance.Processor | Where-Object { Test-IsAvailableObject $_ } | Select-Object -First 1)
-        if ($processor.Count -eq 1 -and Test-HasProperty -Object $processor[0] -Name 'PercentProcessorTime') {
+        if (($processor.Count -eq 1) -and (Test-HasProperty -Object $processor[0] -Name 'PercentProcessorTime')) {
             $cpu = [double]$processor[0].PercentProcessorTime
             if ($cpu -ge 20) {
                 $findings.Add((New-DiagnosticFinding -Id 'performance.high-processor-sample' -Severity 'Info' -Confidence 'Low' -Summary 'Die CPU-Auslastung war in der Momentaufnahme erhöht.' -Evidence @{ PercentProcessorTime = $cpu } -SuggestedProbe 'Mehrere Messungen im definierten Leerlaufzustand durchführen.'))
@@ -143,7 +143,7 @@ if (Test-HasProperty -Object $Snapshot -Name 'Performance') {
         }
     }
 
-    if (Test-HasProperty -Object $Snapshot.Performance -Name 'Memory' -and Test-HasProperty -Object $Snapshot.Performance.Memory -Name 'FreePhysicalMemoryPercent') {
+    if ((Test-HasProperty -Object $Snapshot.Performance -Name 'Memory') -and (Test-HasProperty -Object $Snapshot.Performance.Memory -Name 'FreePhysicalMemoryPercent')) {
         $freeMemoryPercent = $Snapshot.Performance.Memory.FreePhysicalMemoryPercent
         if ($null -ne $freeMemoryPercent -and [double]$freeMemoryPercent -lt 10) {
             $findings.Add((New-DiagnosticFinding -Id 'performance.low-free-memory-sample' -Severity 'Info' -Confidence 'Low' -Summary 'In der Momentaufnahme waren weniger als 10 Prozent des sichtbaren Arbeitsspeichers frei.' -Evidence @{ FreePhysicalMemoryPercent = [double]$freeMemoryPercent } -SuggestedProbe 'Speicherdruck über mehrere Messpunkte und Commit-Auslastung prüfen.'))
@@ -151,7 +151,7 @@ if (Test-HasProperty -Object $Snapshot -Name 'Performance') {
     }
 }
 
-if (Test-HasProperty -Object $Snapshot -Name 'Reliability' -and Test-HasProperty -Object $Snapshot.Reliability -Name 'CriticalOrErrorCount') {
+if ((Test-HasProperty -Object $Snapshot -Name 'Reliability') -and (Test-HasProperty -Object $Snapshot.Reliability -Name 'CriticalOrErrorCount')) {
     $eventCount = $Snapshot.Reliability.CriticalOrErrorCount
     if ($null -ne $eventCount -and [int]$eventCount -ge 10) {
         $findings.Add((New-DiagnosticFinding -Id 'reliability.system-error-burst' -Severity 'Info' -Confidence 'Low' -Summary 'Im gewählten Zeitraum wurden mindestens zehn kritische oder Fehlerereignisse gezählt.' -Evidence @{ CriticalOrErrorCount = [int]$eventCount; EventWindowHours = $Snapshot.Reliability.EventWindowHours } -SuggestedProbe 'Ereignisse nach Quelle, Zeitpunkt und Symptom korrelieren; nicht allein aus der Anzahl diagnostizieren.'))
