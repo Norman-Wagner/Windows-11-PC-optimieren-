@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://example.invalid/windows-pc-snapshot.schema.json",
   "title": "Windows PC Snapshot",
   "type": "object",
@@ -10,13 +10,17 @@
     "NetworkUsed",
     "FilesChanged",
     "OperatingSystem",
+    "Hardware",
     "Performance",
     "Storage",
     "Startup",
     "Security",
     "Power",
     "Updates",
-    "Reliability"
+    "Reliability",
+    "ProblemDevices",
+    "NetworkAdapters",
+    "RecentSystemEvents"
   ],
   "properties": {
     "SchemaVersion": { "const": "2.0" },
