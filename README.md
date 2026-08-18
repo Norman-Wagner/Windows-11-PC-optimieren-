@@ -11,7 +11,9 @@ Der Skill arbeitet symptomorientiert, verlangt vor Änderungen eine konkrete Fre
 - Programmempfehlungen und klare Ablehnungen mit Begründung geben;
 - ungewöhnliche, aber seriöse Diagnosewerkzeuge gezielt einsetzen: Autoruns, WPR/WPA, Process Explorer, Process Monitor und RAMMap;
 - Defender-Leistung messen, ohne Schutz pauschal zu schwächen;
-- datensparsame System- und Leistungsbaselines erstellen.
+- datensparsame System- und Leistungsbaselines erstellen;
+- einen versionierten Snapshot 2.0 mit Diagnosegruppen erzeugen;
+- Snapshots mit deterministischen Regeln auf Auffälligkeiten prüfen, ohne diese als bestätigte Ursache auszugeben.
 
 ## Was er bewusst nicht tut
 
@@ -29,6 +31,8 @@ Der kanonische Skill liegt unter [skills/windows-pc-guru](skills/windows-pc-guru
 - [Programmkatalog](skills/windows-pc-guru/references/software-catalog.md)
 - [Erweiterte Diagnose](skills/windows-pc-guru/references/advanced-diagnostics.md)
 - [Sicherheits- und Datenschutz-Audit](skills/windows-pc-guru/references/security-baseline-audit.md)
+- [Snapshot-Schema 2.0](skills/windows-pc-guru/schemas/windows-pc-snapshot.schema.json)
+- [Deterministische Findings Engine](skills/windows-pc-guru/engine/Diagnostics/Invoke-DiagnosticRules.ps1)
 - Profile: [Büro](skills/windows-pc-guru/profiles/office.md), [Entwicklung](skills/windows-pc-guru/profiles/development.md), [Notebook](skills/windows-pc-guru/profiles/laptop.md), [Spiele](skills/windows-pc-guru/profiles/gaming.md)
 
 ## Firmenmodus: lokal ohne Cloud-KI
@@ -39,7 +43,7 @@ Für Firmenrechner gibt es den verbindlichen [Firmenmodus Lokal](skills/windows-
 pwsh -NoProfile -File .\scripts\Test-LocalOnlyPolicy.ps1
 ```
 
-Bei `Allowed : False` nicht weiterarbeiten. Diese Prüfung verhindert typische Netzwerk- und Downloadbefehle in den enthaltenen Diagnose-Skripten, ist aber kein Ersatz für Geräteschutz oder eine interne Datenschutzregel.
+Bei `Allowed : False` nicht weiterarbeiten. Diese Prüfung erfasst die Diagnose-Skripte und die Findings Engine. Sie verhindert typische Netzwerk-, Download-, Fernsteuerungs- und Löschbefehle, ist aber kein Ersatz für Geräteschutz oder eine interne Datenschutzregel.
 
 ## Installation
 
@@ -50,6 +54,22 @@ npx skills add Norman-Wagner/Windows-11-PC-optimieren- --skill windows-pc-guru
 ```
 
 Alternativ den Ordner `skills/windows-pc-guru` in ein Tool mit Agent-Skills-Unterstützung importieren. Die Skripte werden niemals automatisch ausgeführt.
+
+## Snapshot und Findings
+
+Snapshot 2.0 erzeugen:
+
+```powershell
+pwsh -NoProfile -File .\skills\windows-pc-guru\scripts\Get-WindowsPcSnapshot.ps1 -AsJson
+```
+
+Einen gespeicherten Snapshot regelbasiert auswerten:
+
+```powershell
+pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Diagnostics\Invoke-DiagnosticRules.ps1 -SnapshotPath .\snapshot.json -AsJson
+```
+
+Ein Finding enthält Evidenz, Schweregrad und Confidence. `IsConfirmedCause` bleibt immer `false`; die Engine liefert Auffälligkeiten und nächste Prüfhinweise, keinen automatischen Kausalitätsbeweis.
 
 ## Messung
 
@@ -63,9 +83,10 @@ Das Skript verändert nichts und gibt keine Benutzer-, Computer-, Serien-, MAC-,
 
 ```powershell
 pwsh -NoProfile -File .\scripts\Test-Repository.ps1 -RunDiagnosticsSmokeTest
+Invoke-Pester -Path .\tests -CI -Output Detailed
 ```
 
-Die Prüfung validiert Skill-Metadaten, Referenzen, JSON-Manifeste, PowerShell-Syntax und die lesenden Diagnose-Skripte.
+Die GitHub-Actions-Pipeline validiert Repository-Struktur, PowerShell-Syntax, lokale Datenschutzregeln, Snapshot 2.0, Findings Engine, PSScriptAnalyzer und Pester-Tests.
 
 ## Lizenz und Verantwortung
 
