@@ -16,11 +16,12 @@ Wenn „Firmenmodus Lokal“, „Firmenrechner“ oder vergleichbar genannt wird
 1. Erfasse Symptom, Beginn, letzte Änderung, Windows-Version, Gerätetyp und Ziel. Frage nur, wenn die Antwort den Diagnosepfad verändert.
 2. Ordne den Fall nach [Sicherheit und Zustimmung](references/safety-and-consent.md) ein.
 3. Nutze aus [Symptom-Triage](references/symptom-triage.md) den kleinsten lesenden Prüfpfad.
-4. Trenne Befund, wahrscheinliche Ursache, offene Hypothesen und nächsten Schritt. Ohne Daten gibt es keinen Befund.
-5. Prüfe jede Optimierung mit der [Entscheidungsmatrix](references/optimization-decision-matrix.md): Messwert, Nutzen, Risiko, Rückweg, Nachmessung.
-6. Lege vor jeder G2- bis G4-Änderung Aktion, Grund, Rechte, Dauer, Neustart, Nebenwirkungen, Rückweg und Erfolgskriterium offen. Warte auf ausdrückliche Zustimmung.
-7. Ändere genau eine begrenzte Sache und miss danach mit demselben Signal.
-8. Dokumentiere Ergebnis, Restunsicherheit und Rückbau.
+4. Wenn ein breiter Systemüberblick sinnvoll ist, nutze Snapshot 2.0 und danach die deterministische Findings Engine. Ein Finding ist eine Auffälligkeit, keine bestätigte Ursache.
+5. Trenne Befund, wahrscheinliche Ursache, offene Hypothesen und nächsten Schritt. Ohne Daten gibt es keinen Befund.
+6. Prüfe jede Optimierung mit der [Entscheidungsmatrix](references/optimization-decision-matrix.md): Messwert, Nutzen, Risiko, Rückweg, Nachmessung.
+7. Lege vor jeder G2- bis G4-Änderung Aktion, Grund, Rechte, Dauer, Neustart, Nebenwirkungen, Rückweg und Erfolgskriterium offen. Warte auf ausdrückliche Zustimmung.
+8. Ändere genau eine begrenzte Sache und miss danach mit demselben Signal.
+9. Dokumentiere Ergebnis, Restunsicherheit und Rückbau.
 
 ## Auswahl der Referenzen
 
@@ -37,10 +38,20 @@ Wenn „Firmenmodus Lokal“, „Firmenrechner“ oder vergleichbar genannt wird
 
 ## Werkzeuge
 
-- [Get-WindowsPcSnapshot.ps1](scripts/Get-WindowsPcSnapshot.ps1): lesende technische Übersicht ohne Benutzer-, Computer-, Serien-, MAC-, IP- oder persönliche Dateidaten.
+- [Get-WindowsPcSnapshot.ps1](scripts/Get-WindowsPcSnapshot.ps1): lesende technische Übersicht nach Snapshot-Schema 2.0 ohne Benutzer-, Computer-, Serien-, MAC-, IP-, Prozessnamen- oder persönliche Dateidaten.
+- [windows-pc-snapshot.schema.json](schemas/windows-pc-snapshot.schema.json): maschinenlesbarer Vertrag für Snapshot 2.0.
+- [Invoke-DiagnosticRules.ps1](engine/Diagnostics/Invoke-DiagnosticRules.ps1): rein lesende, deterministische Auswertung des Snapshots. Findings enthalten Evidenz, Severity und Confidence; `IsConfirmedCause` ist immer `false`.
 - [Measure-OptimizationBaseline.ps1](scripts/Measure-OptimizationBaseline.ps1): datensparsame Vorher-/Nachher-Baseline; nur Messung, keine Änderung.
 - [Test-DriverPackage.ps1](scripts/Test-DriverPackage.ps1): lokale SHA-256- und Authenticode-Prüfung; kein Download und keine Installation.
-- Test-LocalOnlyPolicy.ps1 im Repository-Wurzelordner: statische Prüfung der Diagnose-Skripte auf typische Netzwerk-, Download-, Fernsteuerungs- und Löschbefehle.
+- Test-LocalOnlyPolicy.ps1 im Repository-Wurzelordner: statische Prüfung der Diagnose-Skripte und der Findings Engine auf typische Netzwerk-, Download-, Fernsteuerungs- und Löschbefehle.
+
+## Umgang mit Findings
+
+- Verwende Findings als priorisierte Prüfpunkte, nicht als automatische Diagnose.
+- `High` Confidence bedeutet hohe Sicherheit, dass der gemessene Zustand vorliegt, nicht dass er die Nutzerbeschwerde verursacht.
+- `Low` Confidence bei Momentaufnahmen verlangt eine Wiederholungsmessung unter definierten Bedingungen.
+- Sicherheits- und Datenträgerwarnungen dürfen priorisiert werden, ohne daraus eine Leistungsursache abzuleiten.
+- Keine Systemänderung allein aufgrund eines Findings ausführen.
 
 ## Nicht verhandelbare Grenzen
 
