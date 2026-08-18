@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/windows-pc-snapshot.schema.json",
+  "title": "Windows PC Snapshot",
+  "type": "object",
+  "required": [
+    "SchemaVersion",
+    "CollectedAtUtc",
+    "PrivacyNotice",
+    "NetworkUsed",
+    "FilesChanged",
+    "OperatingSystem",
+    "Performance",
+    "Storage",
+    "Startup",
+    "Security",
+    "Power",
+    "Updates",
+    "Reliability"
+  ],
+  "properties": {
+    "SchemaVersion": { "const": "2.0" },
+    "CollectedAtUtc": { "type": "string", "format": "date-time" },
+    "PrivacyNotice": { "type": "string", "minLength": 20 },
+    "NetworkUsed": { "const": false },
+    "FilesChanged": { "const": false },
+    "OperatingSystem": { "type": "array" },
+    "Hardware": { "type": "object" },
+    "Performance": { "type": "object" },
+    "Storage": { "type": "object" },
+    "Startup": { "type": "object" },
+    "Security": { "type": "object" },
+    "Power": { "type": "object" },
+    "Updates": { "type": "object" },
+    "Reliability": { "type": "object" },
+    "ProblemDevices": { "type": "array" },
+    "NetworkAdapters": { "type": "array" },
+    "RecentSystemEvents": { "type": "array" }
+  },
+  "additionalProperties": true
+}
