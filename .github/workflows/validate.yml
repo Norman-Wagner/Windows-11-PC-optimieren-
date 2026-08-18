@@ -14,6 +14,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Install test dependencies
+        shell: pwsh
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module Pester -MinimumVersion 5.5.0 -Force -Scope CurrentUser
+          Install-Module PSScriptAnalyzer -Force -Scope CurrentUser
+
       - name: Validate repository
         shell: pwsh
         run: ./scripts/Test-Repository.ps1 -RunDiagnosticsSmokeTest
+
+      - name: Static analysis
+        shell: pwsh
+        run: |
+          $paths = @('./engine', './skills/windows-pc-guru/scripts', './scripts')
+          $results = foreach ($path in $paths) {
+            Invoke-ScriptAnalyzer -Path $path -Recurse -Severity Warning,Error
+          }
+          if ($results) {
+            $results | Format-Table -AutoSize
+          }
+          $errors = @($results | Where-Object Severity -eq 'Error')
+          if ($errors.Count -gt 0) {
+            throw "PSScriptAnalyzer found $($errors.Count) error(s)."
+          }
+
+      - name: Run Pester
+        shell: pwsh
+        run: |
+          Import-Module Pester -MinimumVersion 5.5.0 -Force
+          Invoke-Pester -Path ./tests -CI -Output Detailed
