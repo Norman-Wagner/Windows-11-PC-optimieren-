@@ -17,9 +17,10 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repositoryRoot = Split-Path -Parent $PSScriptRoot
+$skillRoot = Join-Path $repositoryRoot 'skills\windows-pc-guru'
 $runtimeDirectories = @(
-    (Join-Path $repositoryRoot 'skills\windows-pc-guru\scripts'),
-    (Join-Path $repositoryRoot 'engine')
+    (Join-Path $skillRoot 'scripts'),
+    (Join-Path $skillRoot 'engine')
 )
 $patterns = @(
     'Invoke-WebRequest',
