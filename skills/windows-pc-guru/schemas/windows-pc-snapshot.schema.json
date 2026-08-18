@@ -28,7 +28,7 @@
     "PrivacyNotice": { "type": "string", "minLength": 20 },
     "NetworkUsed": { "const": false },
     "FilesChanged": { "const": false },
-    "OperatingSystem": { "type": "array" },
+    "OperatingSystem": { "type": "object" },
     "Hardware": { "type": "object" },
     "Performance": { "type": "object" },
     "Storage": { "type": "object" },
