@@ -243,19 +243,19 @@ if ($IncludeRecentSystemEvents) {
         }
     }
 
-    if ($eventProbe.Count -gt 0 -and -not ($eventProbe[0].PSObject.Properties.Name -contains 'Unavailable')) {
-        $criticalSystemEventCount = $eventProbe[0].CriticalOrErrorCount
-        $recentSystemEvents = @($eventProbe[0].Events)
+    if (@($eventProbe).Count -gt 0 -and -not (@($eventProbe)[0].PSObject.Properties.Name -contains 'Unavailable')) {
+        $criticalSystemEventCount = @($eventProbe)[0].CriticalOrErrorCount
+        $recentSystemEvents = @(@($eventProbe)[0].Events)
     }
     else {
-        $recentSystemEvents = $eventProbe
+        $recentSystemEvents = @($eventProbe)
     }
 }
 
 $memorySummary = [pscustomobject]@{}
-if ($operatingSystem.Count -gt 0 -and -not ($operatingSystem[0].PSObject.Properties.Name -contains 'Unavailable')) {
-    $totalMemory = [double]$operatingSystem[0].TotalVisibleMemoryMiB
-    $freeMemory = [double]$operatingSystem[0].FreePhysicalMemoryMiB
+if (@($operatingSystem).Count -gt 0 -and -not (@($operatingSystem)[0].PSObject.Properties.Name -contains 'Unavailable')) {
+    $totalMemory = [double]@($operatingSystem)[0].TotalVisibleMemoryMiB
+    $freeMemory = [double]@($operatingSystem)[0].FreePhysicalMemoryMiB
     $freePercent = $null
     if ($totalMemory -gt 0) {
         $freePercent = [math]::Round(100 * $freeMemory / $totalMemory, 1)
