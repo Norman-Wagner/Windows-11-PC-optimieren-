@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Windows-PC-Guru Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Windows-PC-Guru</p>
+      <h1>Diagnose-Dashboard</h1>
+      <p class="subtitle">Lokale Auswertung von Snapshot 2.0. Keine Cloud, kein Upload, keine automatische Systemänderung.</p>
+    </div>
+    <div id="overallBadge" class="badge neutral">Noch keine Daten</div>
+  </header>
+
+  <main>
+    <section class="panel import-panel" aria-labelledby="importTitle">
+      <div>
+        <h2 id="importTitle">Diagnosedaten laden</h2>
+        <p>Wähle zuerst deine <code>snapshot.json</code>. Eine Findings-Datei ist optional.</p>
+      </div>
+      <div class="actions">
+        <label class="file-button">Snapshot auswählen<input id="snapshotInput" type="file" accept="application/json,.json"></label>
+        <label class="file-button secondary">Findings auswählen<input id="findingsInput" type="file" accept="application/json,.json"></label>
+        <button id="resetButton" class="secondary" type="button">Zurücksetzen</button>
+      </div>
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+    </section>
+
+    <section id="emptyState" class="panel empty-state">
+      <h2>Noch kein Snapshot geladen</h2>
+      <p>Nach dem Laden erscheinen hier die wichtigsten Zustände deines PCs in verständlicher Form.</p>
+    </section>
+
+    <div id="dashboard" hidden>
+      <section class="kpi-grid" aria-label="Übersicht">
+        <article class="kpi"><span>Windows</span><strong id="kpiWindows">–</strong><small id="kpiBuild">–</small></article>
+        <article class="kpi"><span>Freier RAM</span><strong id="kpiMemory">–</strong><small id="kpiMemoryDetail">–</small></article>
+        <article class="kpi"><span>Systemlaufwerk frei</span><strong id="kpiStorage">–</strong><small id="kpiStorageDetail">–</small></article>
+        <article class="kpi"><span>Autostarts</span><strong id="kpiStartup">–</strong><small>erkannte Einträge</small></article>
+        <article class="kpi"><span>Gerätefehler</span><strong id="kpiDevices">–</strong><small>ConfigManagerErrorCode ≠ 0</small></article>
+        <article class="kpi"><span>Neustart</span><strong id="kpiReboot">–</strong><small>Windows Update / Komponenten</small></article>
+      </section>
+
+      <section class="two-column">
+        <article class="panel">
+          <div class="section-head"><h2>System</h2><span id="collectedAt" class="muted"></span></div>
+          <dl id="systemDetails" class="details"></dl>
+        </article>
+        <article class="panel">
+          <h2>Sicherheit</h2>
+          <div id="securityList" class="status-list"></div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="section-head"><h2>Speicher</h2><span class="muted">Freier Platz je Laufwerk</span></div>
+        <div id="storageList" class="storage-list"></div>
+      </section>
+
+      <section class="two-column">
+        <article class="panel">
+          <h2>Leistung</h2>
+          <div id="performanceList" class="status-list"></div>
+        </article>
+        <article class="panel">
+          <h2>Zuverlässigkeit</h2>
+          <div id="reliabilityList" class="status-list"></div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="section-head"><h2>Findings</h2><span id="findingCount" class="muted">keine Findings-Datei geladen</span></div>
+        <div id="findingsList" class="findings-list"></div>
+      </section>
+
+      <section class="panel privacy-panel">
+        <h2>Datenschutz</h2>
+        <p id="privacyNotice"></p>
+        <p class="muted">Das Dashboard verarbeitet die ausgewählten Dateien ausschließlich im Browser auf diesem PC. Es enthält keine Netzwerkaufrufe.</p>
+      </section>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

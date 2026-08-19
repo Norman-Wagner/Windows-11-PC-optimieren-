@@ -11,13 +11,21 @@ Der Skill arbeitet symptomorientiert, verlangt vor Änderungen eine konkrete Fre
 - Programmempfehlungen und klare Ablehnungen mit Begründung geben;
 - ungewöhnliche, aber seriöse Diagnosewerkzeuge gezielt einsetzen: Autoruns, WPR/WPA, Process Explorer, Process Monitor und RAMMap;
 - Defender-Leistung messen, ohne Schutz pauschal zu schwächen;
-- datensparsame System- und Leistungsbaselines erstellen.
+- datensparsame System- und Leistungsbaselines erstellen;
+- einen versionierten Snapshot 2.0 mit Diagnosegruppen erzeugen;
+- Snapshots mit deterministischen Regeln auf Auffälligkeiten prüfen, ohne diese als bestätigte Ursache auszugeben;
+- Vorher-/Nachher-Snapshots vergleichen und Verbesserung, Regression oder unklare Momentwerte unterscheiden;
+- Findings auf einen kontrollierten Katalog mit zehn geführten Maßnahmen abbilden;
+- jede Remediation vor dem Preview gegen Windows-Familie, Edition, Build, Architektur, Gerätetyp und lokale Fähigkeiten prüfen;
+- Änderungspläne als Preview erzeugen und automatische Windows-Schreibaktionen derzeit bewusst blockieren.
 
 ## Was er bewusst nicht tut
 
 - keine Registry-Cleaner, Driver-Booster, RAM-Booster, Debloat- oder Game-Booster-Skripte;
 - kein Abschalten von Defender, Firewall, SmartScreen, Secure Boot, BitLocker oder Signaturprüfung;
 - keine Löschung, Installation, Treiber-, BIOS-, BitLocker- oder Partitionsänderung ohne Zustimmung und Rückweg;
+- keine automatische Windows-Änderung allein aufgrund eines Findings oder Katalogeintrags;
+- kein Preview auf einem als inkompatibel erkannten System;
 - kein Zugriff auf E-Mails, Browserdaten oder persönliche Dateien als Teil einer normalen PC-Diagnose;
 - keine erfundenen Diagnosen oder behaupteten Verbesserungen.
 
@@ -29,6 +37,14 @@ Der kanonische Skill liegt unter [skills/windows-pc-guru](skills/windows-pc-guru
 - [Programmkatalog](skills/windows-pc-guru/references/software-catalog.md)
 - [Erweiterte Diagnose](skills/windows-pc-guru/references/advanced-diagnostics.md)
 - [Sicherheits- und Datenschutz-Audit](skills/windows-pc-guru/references/security-baseline-audit.md)
+- [Snapshot-Schema 2.0](skills/windows-pc-guru/schemas/windows-pc-snapshot.schema.json)
+- [Remediation-Schema 2.0](skills/windows-pc-guru/schemas/remediation.schema.json)
+- [Deterministische Findings Engine](skills/windows-pc-guru/engine/Diagnostics/Invoke-DiagnosticRules.ps1)
+- [Snapshot-Vergleich](skills/windows-pc-guru/engine/Measurement/Compare-WindowsPcSnapshot.ps1)
+- [Kompatibilitätskontext](skills/windows-pc-guru/engine/Compatibility/Get-RemediationCompatibilityContext.ps1)
+- [Kompatibilitätsprüfung](skills/windows-pc-guru/engine/Compatibility/Test-RemediationCompatibility.ps1)
+- [Remediation-Katalog](skills/windows-pc-guru/remediations/catalog.json)
+- [Kontrollierte Change Engine](skills/windows-pc-guru/engine/Change/Invoke-ControlledChange.ps1)
 - Profile: [Büro](skills/windows-pc-guru/profiles/office.md), [Entwicklung](skills/windows-pc-guru/profiles/development.md), [Notebook](skills/windows-pc-guru/profiles/laptop.md), [Spiele](skills/windows-pc-guru/profiles/gaming.md)
 
 ## Firmenmodus: lokal ohne Cloud-KI
@@ -39,7 +55,7 @@ Für Firmenrechner gibt es den verbindlichen [Firmenmodus Lokal](skills/windows-
 pwsh -NoProfile -File .\scripts\Test-LocalOnlyPolicy.ps1
 ```
 
-Bei `Allowed : False` nicht weiterarbeiten. Diese Prüfung verhindert typische Netzwerk- und Downloadbefehle in den enthaltenen Diagnose-Skripten, ist aber kein Ersatz für Geräteschutz oder eine interne Datenschutzregel.
+Bei `Allowed : False` nicht weiterarbeiten. Diese Prüfung erfasst die Diagnose-Skripte und die Engine. Sie verhindert typische Netzwerk-, Download-, Fernsteuerungs- und Löschbefehle, ist aber kein Ersatz für Geräteschutz oder eine interne Datenschutzregel.
 
 ## Installation
 
@@ -50,6 +66,54 @@ npx skills add Norman-Wagner/Windows-11-PC-optimieren- --skill windows-pc-guru
 ```
 
 Alternativ den Ordner `skills/windows-pc-guru` in ein Tool mit Agent-Skills-Unterstützung importieren. Die Skripte werden niemals automatisch ausgeführt.
+
+## Snapshot und Findings
+
+Snapshot 2.0 erzeugen:
+
+```powershell
+pwsh -NoProfile -File .\skills\windows-pc-guru\scripts\Get-WindowsPcSnapshot.ps1 -AsJson
+```
+
+Einen gespeicherten Snapshot regelbasiert auswerten:
+
+```powershell
+pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Diagnostics\Invoke-DiagnosticRules.ps1 -SnapshotPath .\snapshot.json -AsJson
+```
+
+Ein Finding enthält Evidenz, Schweregrad und Confidence. `IsConfirmedCause` bleibt immer `false`; die Engine liefert Auffälligkeiten und nächste Prüfhinweise, keinen automatischen Kausalitätsbeweis.
+
+## Vorher/Nachher vergleichen
+
+```powershell
+pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Measurement\Compare-WindowsPcSnapshot.ps1 -BeforePath .\before.json -AfterPath .\after.json -AsJson
+```
+
+Richtungsbezogene Signale wie freier Systemlaufwerkspeicher, Autostart-Anzahl, Gerätefehler und ausstehender Neustart können als Verbesserung oder Regression eingeordnet werden. Einzelne CPU- oder RAM-Momentwerte bleiben bewusst `Inconclusive`.
+
+## Remediation, Kompatibilität und Änderungsplan
+
+Lokalen Kompatibilitätskontext erfassen:
+
+```powershell
+pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Compatibility\Get-RemediationCompatibilityContext.ps1 -AsJson
+```
+
+Passende Optionen zu einem Finding anzeigen:
+
+```powershell
+pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Remediation\Get-RemediationOptions.ps1 -FindingId startup.high-count -AsJson
+```
+
+Jede Option enthält ein `CompatibilityResult`. Nur `Compatible` ist freigegeben. `Blocked` bedeutet technische Unverträglichkeit; `ReviewRequired` bedeutet, dass wichtige Systemmerkmale nicht sicher bestimmt werden konnten.
+
+Preview einer Maßnahme:
+
+```powershell
+pwsh -NoProfile -File .\skills\windows-pc-guru\engine\Change\Invoke-ControlledChange.ps1 -RecipeId startup.review-entries -AsJson
+```
+
+Die Change Engine prüft die Kompatibilität vor dem Preview. Bei `CompatibilityBlocked` oder `CompatibilityReviewRequired` wird kein Änderungsplan erzeugt. Auch mit `-Approve` bleiben die aktuellen produktiven Katalogeinträge `ManualGuided`; die Engine führt noch keine Windows-Schreiboperation automatisch aus. Der Backup/Apply/Verify/Rollback-Lifecycle wird ausschließlich über einen internen, nicht schreibenden TestHarness automatisiert getestet.
 
 ## Messung
 
@@ -63,9 +127,10 @@ Das Skript verändert nichts und gibt keine Benutzer-, Computer-, Serien-, MAC-,
 
 ```powershell
 pwsh -NoProfile -File .\scripts\Test-Repository.ps1 -RunDiagnosticsSmokeTest
+Invoke-Pester -Path .\tests -CI -Output Detailed
 ```
 
-Die Prüfung validiert Skill-Metadaten, Referenzen, JSON-Manifeste, PowerShell-Syntax und die lesenden Diagnose-Skripte.
+Die GitHub-Actions-Pipeline validiert Repository-Struktur, PowerShell-Syntax, lokale Datenschutzregeln, Snapshot 2.0, Findings Engine, Snapshot-Vergleich, Remediation-Schema 2.0, Compatibility Engine, Change-Preview, PSScriptAnalyzer und Pester-Tests.
 
 ## Lizenz und Verantwortung
 
